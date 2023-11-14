@@ -10,13 +10,21 @@
 #include "Lock.hpp"
 #include "LockObject.hpp"
 
+void testLock(){
+    std::string path = "/Users/chris/Documents/";
+    LockObject* test = Lock::getLock(path, "fssLock");
+    
+    if (test == 0){
+        std::cout << "Failed to get lock\n";
+    }
+    else{
+        std::cout << "Received lockobject\n";
+    }
+}
+
 int main(){
-    std::string path = "/Users/chris/Documents/git-repos/chrissearch";
-    
     std::cout << "Let's boil this plate\n";
-    
-    //LockObject test = Lock::getLock(path, "jawn.asdf");
-    Lock::testy();
+    testLock();
     
     return 0;
 }

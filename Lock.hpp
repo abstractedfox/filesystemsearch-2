@@ -11,13 +11,15 @@
 #include <stdio.h>
 #include "LockObject.hpp"
 #include <string>
-#include <istream>
+#include <fstream>
 #include <iostream>
+#include <random>
+#include "limits.h"
 
 class Lock{
 public:
     static void testy();
-    static LockObject getLock(std::string path, std::string filename);
+    static LockObject* getLock(std::string path, std::string filename);
 };
 
 #endif /* Lock_hpp */

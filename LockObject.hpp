@@ -12,7 +12,9 @@
 
 class LockObject{
 public:
-    int value;
+    int value = 0;
+    
+    LockObject(int setValue);
 };
 
 #endif /* LockObject_hpp */

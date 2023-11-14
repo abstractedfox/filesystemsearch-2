@@ -7,7 +7,6 @@
 
 #include "LockObject.hpp"
 
-class LockObject{
-public:
-    int value = 0;
+LockObject::LockObject(int setValue){
+    value = setValue;
 }
