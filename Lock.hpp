@@ -19,9 +19,9 @@
 
 class Lock{
 public:
-    static void testy();
     static LockObject* getLock(std::string path, std::string filename);
-    bool releaseLock(LockObject* lockObject);
+    static LockObject* getLock(std::string path, std::string filename, int lockValue);
+    static bool releaseLock(LockObject* lockObject);
 };
 
 #endif /* Lock_hpp */

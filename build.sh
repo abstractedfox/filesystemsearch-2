@@ -1,3 +1,4 @@
+#!/bin/bash
 g++ -std=c++20 -c LockObject.cpp
 g++ -std=c++20 -c Lock.cpp
 g++ -std=c++20 -c boilerplate.cpp

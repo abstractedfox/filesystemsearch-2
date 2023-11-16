@@ -14,9 +14,9 @@
 void testLock(){
     std::string path = "/Users/chris/Documents/";
     path = "/home/chris/testfiles/";
+    std::string lockfileName = "fssLock";
     
-    
-    LockObject* test = Lock::getLock(path, "fssLock");
+    LockObject* test = Lock::getLock(path, lockfileName);
     
     if (test == 0){
         std::cout << "Failed to get lock\n";
@@ -24,6 +24,14 @@ void testLock(){
     else{
         std::cout << "Received lockobject\n";
     }
+
+    if (Lock::releaseLock(test)){
+        std::cout << "Released lock\n";
+    }
+    else{
+        std::cout << "Failed to release lock\n";
+    }
+
 }
 
 int main(){
