@@ -15,11 +15,13 @@
 #include <iostream>
 #include <random>
 #include "limits.h"
+#include <chrono>
 
 class Lock{
 public:
     static void testy();
     static LockObject* getLock(std::string path, std::string filename);
+    bool releaseLock(LockObject* lockObject);
 };
 
 #endif /* Lock_hpp */

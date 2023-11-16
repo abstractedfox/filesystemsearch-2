@@ -26,20 +26,35 @@ LockObject* Lock::getLock(std::string path, std::string filename){
         return 0;
     }
     
-    std::ofstream writeLockFile;
-    writeLockFile.open(fullPath, std::ofstream::out);
+    std::fstream writeLockFile;
+    writeLockFile.open(fullPath, std::fstream::out);
     if (writeLockFile.fail()){
         std::cerr << "Creation of lock file failed\n";
         return 0;
     }
     
-    std::default_random_engine randomGenerator;
+    std::mt19937 randomGenerator(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_int_distribution<int> lockValueRandom(INT_MIN, INT_MAX);
-    int lockValue = lockValueRandom(randomGenerator);
+    int lockValue = randomGenerator();
     
-    LockObject* lockObject = new LockObject(lockValue);
+    LockObject* lockObject = new LockObject(lockValue, fullPath);
     
     writeLockFile << lockValue;
     
+    int size = writeLockFile.tellp();
+    std::cout << "size of lockfile: " << size << "\n";
+    char* buffer = new char[size];
+    writeLockFile.seekg(0);
+    writeLockFile.read(buffer, size);
+    int checkValue = buffer[0];
+    std::cout << lockValue << " " << checkValue << "\n";
+    
     return lockObject;
+}
+
+bool Lock::releaseLock(LockObject* lockObject){
+    std::ifstream readLockFile;
+    readLockFile.open(lockObject->path, std::ifstream::in);
+
+    return true;
 }

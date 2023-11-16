@@ -9,9 +9,12 @@
 #include <iostream>
 #include "Lock.hpp"
 #include "LockObject.hpp"
+#include <random>
 
 void testLock(){
     std::string path = "/Users/chris/Documents/";
+    path = "/home/chris/testfiles/";
+    
     LockObject* test = Lock::getLock(path, "fssLock");
     
     if (test == 0){

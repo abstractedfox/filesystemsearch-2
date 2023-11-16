@@ -7,6 +7,7 @@
 
 #include "LockObject.hpp"
 
-LockObject::LockObject(int setValue){
+LockObject::LockObject(int setValue, std::string fullPath){
     value = setValue;
+    std::string path = fullPath;
 }

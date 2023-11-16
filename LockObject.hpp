@@ -9,12 +9,14 @@
 #define LockObject_hpp
 
 #include <stdio.h>
+#include <string>
 
 class LockObject{
 public:
     int value = 0;
+    std::string path;
     
-    LockObject(int setValue);
+    LockObject(int setValue, std::string fullPath);
 };
 
 #endif /* LockObject_hpp */
