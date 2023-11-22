@@ -9,7 +9,12 @@
 #include <iostream>
 #include "Lock.hpp"
 #include "LockObject.hpp"
+#include "Database.hpp"
 #include <random>
+
+void testDb(){
+    Database::SQLiteBoilerplate();
+}
 
 void testLock(){
     std::string path = "/Users/chris/Documents/";
@@ -36,7 +41,7 @@ void testLock(){
 
 int main(){
     std::cout << "Let's boil this plate\n";
-    testLock();
-    
+    //testLock();
+    testDb();
     return 0;
 }
