@@ -13,7 +13,14 @@
 #include <random>
 
 void testDb(){
-    Database::SQLiteBoilerplate();
+    //Database::SQLiteBoilerplate();
+    std::string path = "";
+    std::string filename = "testdb.sqlite3";
+    
+    if(Database::Init(path, filename)){
+        std::cout << "Database initialized\n";
+    }
+    
 }
 
 void testLock(){

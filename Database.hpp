@@ -16,4 +16,5 @@
 class Database{
 public:
     static void SQLiteBoilerplate();
+    static bool Init(std::string path, std::string filename);
 };
