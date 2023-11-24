@@ -7,12 +7,47 @@
 
 #include "Database.hpp"
 
-void Database::SQLiteBoilerplate(){
-    sqlite3* handle;
+//Form a statement that initializes a database schema (only creates the statement, doesn't run it)
+std::string Database::FormStatement_InitSchema(std::vector<Table> Tables){
+    if (Tables.size() < 1){
+        return NULL;
+    }
     
-    int result = sqlite3_open_v2("asdf", &handle, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
+    std::string statement = "";
     
-    std::cout << "jawn: " << result << "\n";
+    std::string columnTemplate = "{} {} {} {} {}";
+    //name, data type, primary key, unique, not null
+    
+    for (auto &table : Tables){
+        statement.append("CREATE TABLE ");
+        statement.append(table.name);
+        statement.append(" (");
+        
+        for (int i = 0; i < table.columns.size(); i++){
+            std::string newColumn = "";
+            std::string isUnique = "";
+            std::string isNotNull = "";
+            std::string isPrimaryKey = "";
+            if (table.columns[i].UNIQUE){
+                isUnique = "UNIQUE";
+            }
+            if (table.columns[i].isNotNull){
+                isNotNull = "NOT NULL";
+            }
+            if (table.pKey != NULL){
+                if (table.pKey == table.columns){
+                    isPrimaryKey = "PRIMARY KEY";
+                }
+            }
+            newColumn = std::format(columnTemplate, table.columns[i].name, table.columns[i].sqlDatatype, isPrimaryKey, isUnique, isNotNull);
+            
+            statement.append(newColumn);
+            if (i != table.columns.size() - 1){
+                statement.append(", ");
+            }
+        }
+        statement.append(";\n");
+    }
 }
 
 bool Database::Init(std::string path, std::string filename){

@@ -11,10 +11,10 @@
 #include <stdio.h>
 #include "sqlite3.h"
 #include <iostream>
+#include "DatabaseStructs.h"
 
 #endif /* Database_hpp */
 class Database{
 public:
-    static void SQLiteBoilerplate();
     static bool Init(std::string path, std::string filename);
 };
