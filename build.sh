@@ -1,7 +1,13 @@
 #!/bin/bash
-g++ -std=c++20 -c LockObject.cpp
-g++ -std=c++20 -c Lock.cpp
-g++ -std=c++20 -c boilerplate.cpp
-g++ -std=c++20 -c Database.cpp
-gcc -c sqlite3.c
-g++ LockObject.o Lock.o boilerplate.o Database.o sqlite3.o -o a.out
+if [ ! -d "bin" ]; then
+    mkdir bin
+fi
+
+g++ -std=c++20 -c ./src/LockObject.cpp -o ./bin/LockObject.o
+g++ -std=c++20 -c ./src/Lock.cpp -o ./bin/Lock.o
+g++ -std=c++20 -c ./src/boilerplate.cpp -o ./bin/boilerplate.o
+g++ -std=c++20 -c ./src/Database.cpp -o ./bin/Database.o
+g++ -std=c++20 -c ./src/Schemas.cpp -o ./bin/Schemas.o
+gcc -c ./src/sqlite3.c -o ./bin/sqlite3.o
+
+g++ ./bin/LockObject.o ./bin/Lock.o ./bin/Schemas.o ./bin/boilerplate.o ./bin/Database.o ./bin/sqlite3.o  -o ./bin/a.out
