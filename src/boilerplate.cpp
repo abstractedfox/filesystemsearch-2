@@ -14,8 +14,9 @@
 #include "Schemas.hpp"
 
 void testDb(){
+    
     //Schema* schematime = &Schemas::testSchema;
-    std::cout << "sizey " << Schemas::boilerplate.tables.size() << "\n";
+    std::cout << "sizey " << Schemas::schemaTemplate.tables.size() << "\n";
     
     std::string path = "";
     std::string filename = "testdb.sqlite3";

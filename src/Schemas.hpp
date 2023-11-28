@@ -11,29 +11,29 @@
 #include "DatabaseStructs.hpp"
 
 namespace Schemas{
-    Schema boilerplate = {};
-/*
-    Schema testSchema = {
-        //tables
+    /*For future sanity, here's a template of an entirely empty schema*/
+    const Schema schemaTemplate = {
+        //Table vector
         {
-            //table
-            "table1",
-            //columns
+            //instances of Table
             {
-                //a column
+                "tableName",
+                //Column vector
                 {
-                    false, false, "varchar", "testColumn1"
+                    //instances of Column
+                    {
+                        false, //UNIQUE
+                        false, //NOT_NULL
+                        "varchar",
+                        "columnName"
+                    }
                 },
-                {
-                    true, false, "varchar", "testColumn2"
-                }
-            },
-            NULL //no pkey for now
-        }
-    },
-    NULL, //no migrate function yet
-    NULL //no next schema
- */
+                NULL //pkey as a pointer
+            }
+        },
+        NULL, //ptr to init or migration function
+        NULL //ptr to next schema
+    };
 }
 
 #endif /* Schemas_h */
