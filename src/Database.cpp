@@ -30,10 +30,8 @@ std::string Database::FormStatement_InitSchema(std::vector<Table> Tables){
             if (table.columns[i].NOT_NULL){
                 isNotNull = "NOT NULL ";
             }
-            if (table.pKey != NULL){
-                if (*table.pKey == table.columns[i]){
-                    isPrimaryKey = "PRIMARY KEY ";
-                }
+            if (table.columnIndexAsPkey > -1){
+                isPrimaryKey = "PRIMARY KEY ";
             }
             statement.append(table.columns[i].name);
             statement.append(" ");

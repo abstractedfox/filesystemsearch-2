@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include "Migrations.hpp"
 
 #ifndef DatabaseStructs_hpp
 #define DatabaseStructs_hpp
@@ -26,14 +27,14 @@ class Table{
 public:
     std::string name;
     std::vector<Column> columns;
-    Column* pKey;
+    int columnIndexAsPkey;
 };
 
 class Schema{
 public:
     std::vector<Table> tables;
-    bool (*migrate)(std::string pathToDb);
-    
+    int (*migrate)(std::string pathToDb); //Returns the SQLite result
+
     Schema* next;
 };
 

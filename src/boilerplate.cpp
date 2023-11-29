@@ -39,7 +39,7 @@ void testDb(){
     testTable1.columns.push_back(testColumn3);
     testTable1.columns.push_back(testColumn4);
     testTable1.columns.push_back(testColumn5);
-    testTable1.pKey = &testTable1.columns[4];
+    testTable1.columnIndexAsPkey = 4;
     
     std::vector<Table> tables;
     tables.push_back(testTable1);
