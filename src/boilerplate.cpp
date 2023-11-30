@@ -14,14 +14,13 @@
 #include "Schemas.hpp"
 
 void testDb(){
-    
     //Schema* schematime = &Schemas::testSchema;
     std::cout << "sizey " << Schemas::schemaTemplate.tables.size() << "\n";
     
     std::string path = "";
     std::string filename = "testdb.sqlite3";
     std::string pathOfDb = path + filename;
-    
+    /*
     if(Database::Init(path, filename)){
         std::cout << "Database initialized\n";
     }
@@ -40,15 +39,11 @@ void testDb(){
     testTable1.columns.push_back(testColumn4);
     testTable1.columns.push_back(testColumn5);
     testTable1.columnIndexAsPkey = 4;
+    */
+
+    Database::Migrate(pathOfDb, &Schemas::schema1);
     
-    std::vector<Table> tables;
-    tables.push_back(testTable1);
-    
-    std::string initStatement = Database::FormStatement_InitSchema(tables);
-    
-    std::cout << "init statement:\n" << initStatement << "\n";
-    
-    Database::RunStatement(pathOfDb, initStatement, true, NULL);
+    //Database::RunStatement(pathOfDb, initStatement, true, NULL);
 }
 
 void testLock(){

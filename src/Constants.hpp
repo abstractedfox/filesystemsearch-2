@@ -11,5 +11,6 @@
 #define Constants_h
 namespace Constants{
     const std::string lockFileName = "fssLock";
-}
+    const std::string databaseName = "fssDb.sqlite3";
+};
 #endif /* Constants_h */

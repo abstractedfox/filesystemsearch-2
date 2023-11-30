@@ -7,6 +7,10 @@
 
 #include "Database.hpp"
 
+void Database::Migrate(std::string pathToDb, const Schema* schema){
+    schema->migration(pathToDb, schema);
+}
+
 //Form a statement that initializes a database schema (only creates the statement, doesn't run it)
 std::string Database::FormStatement_InitSchema(std::vector<Table> Tables){
     if (Tables.size() < 1){
@@ -65,7 +69,7 @@ bool Database::RunStatement(std::string path, std::string statement, bool handle
     if (handleOwnLock){
         lock = Lock::getLock(path, Constants::lockFileName);
         if (lock == NULL){
-            std::cerr << "Failed to get lock";
+            std::cerr << "Failed to get lock\ns";
             return false;
         }
     }
@@ -94,7 +98,16 @@ bool Database::RunStatement(std::string path, std::string statement, bool handle
 }
 
 //Create a new database file if one doesn't exist
-bool Database::Init(std::string path, std::string filename){
+bool Database::Init(std::string path, std::string filename, bool handleOwnLock){
+    LockObject* lock;
+    if (handleOwnLock){
+        lock = Lock::getLock(path, Constants::lockFileName);
+        if (lock == NULL){
+            std::cerr << "Failed to get lock\n";
+            return false;
+        }
+    }
+    
     sqlite3* dbHandle;
     std::string fullpath = "";
     fullpath.append(path);
@@ -107,8 +120,14 @@ bool Database::Init(std::string path, std::string filename){
     
     if (dbOpenResult != SQLITE_OK){
         std::cerr << "Database could not be opened or created, SQLite error code " << dbOpenResult << "\n";
+        
+        if (handleOwnLock){
+            Lock::releaseLock(lock);
+        }        
         return false;
     }
-    
+    if (handleOwnLock){
+        Lock::releaseLock(lock);
+    }
     return true;
 }

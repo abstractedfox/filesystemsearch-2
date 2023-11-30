@@ -7,6 +7,9 @@
 
 #include "Schemas.hpp"
 
+//Usage note: The purpose of these is to have a representation of the schema in software so it can determine whether the database matches a known schema, and migrate it if necessary.
+//Each schema should have a pointer to a function matching the 'Migration' typedef that, when run against the database, either initializes that schema or migrates that schema from the previous one
+
 const Schema Schemas::schema1 = {
     //Table vector
     {

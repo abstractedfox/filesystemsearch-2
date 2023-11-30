@@ -17,10 +17,13 @@
 #include "Lock.hpp"
 #include "Constants.hpp"
 
-#endif /* Database_hpp */
 class Database{
 public:
+    static void Migrate(std::string pathToDb, const Schema* schema);
     static std::string FormStatement_InitSchema(std::vector<Table> Tables);
     static bool RunStatement(std::string path, std::string statement, bool handleOwnLock, int (*callback)(void*, int, char**, char**));
-    static bool Init(std::string path, std::string filename);
+    static bool Init(std::string path, std::string filename, bool handleOwnLock);
 };
+
+
+#endif /* Database_hpp */

@@ -5,6 +5,10 @@
 #ifndef DatabaseStructs_hpp
 #define DatabaseStructs_hpp
 
+class Schema; //forward declaration for Migration typedef
+
+typedef int (*Migration)(std::string pathToDb, const Schema* schema);
+
 struct Column{
     bool UNIQUE;
     bool NOT_NULL;
@@ -33,8 +37,8 @@ public:
 class Schema{
 public:
     std::vector<Table> tables;
-    int (*migrate)(std::string pathToDb); //Returns the SQLite result
-
+    
+    Migration migration;
     Schema* next;
 };
 
