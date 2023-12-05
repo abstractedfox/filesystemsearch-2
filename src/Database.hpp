@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-//#include <format>
 #include "sqlite3.h"
 #include "DatabaseStructs.hpp"
 #include "Lock.hpp"
@@ -19,11 +18,10 @@
 
 class Database{
 public:
-    static void Migrate(std::string pathToDb, const Schema* schema);
+    static void Migrate(DbPath dbPath, const Schema* schema);
     static std::string FormStatement_InitSchema(std::vector<Table> Tables);
-    static bool RunStatement(std::string path, std::string statement, bool handleOwnLock, int (*callback)(void*, int, char**, char**));
-    static bool Init(std::string path, std::string filename, bool handleOwnLock);
+    static Result RunStatement(DbPath dbPath, std::string statement, bool handleOwnLock, int (*callback)(void*, int, char**, char**));
+    static Result Init(DbPath dbPath, std::string filename, bool handleOwnLock);
 };
-
 
 #endif /* Database_hpp */

@@ -9,7 +9,7 @@
 
 class Migrations{
 public:
-    static int migration1(std::string pathToDb, const Schema* schema);
+    static int migration1(DbPath dbPath, const Schema* schema);
 };
 
 #endif

@@ -73,10 +73,10 @@ LockObject* Lock::getLock(std::string path, std::string filename, int lockValue)
     return lockObject;
 }
 
-bool Lock::releaseLock(LockObject* lockObject){
+Result Lock::releaseLock(LockObject* lockObject){
     if (lockObject == NULL){
         std::cerr << "LockObject is null, could not release invalid lock\n";
-        return false;
+        return LOCK_FAIL;
     }
 
     std::ifstream readLockFile;
@@ -97,16 +97,16 @@ bool Lock::releaseLock(LockObject* lockObject){
     if (deserialized == lockObject->value){
         if (std::remove(lockObject->path.c_str()) != 0){
             std::cerr << "Failed to delete lock file\n";
-            return false;
+            return LOCK_FAIL;
         }
         
         delete lockObject;
-        return true;
+        return SUCCESS;
     }
     else{
         std::cerr << "Value in lockfile did not match expected value\n";
-        return false;
+        return LOCK_FAIL;
     }
 
-    return false;
+    return LOCK_FAIL;
 }

@@ -1,29 +1,30 @@
 #include "Migrations.hpp"
 
 
-int Migrations::migration1(std::string pathToDb, const Schema* schema){
+Result Migrations::migration1(DbPath dbPath, const Schema* schema){
     LockObject* lock;
-    lock = Lock::getLock(pathToDb, Constants::lockFileName);
+    lock = Lock::getLock(dbPath.pathToDb, Constants::lockFileName);
     if (lock == NULL){
         std::cerr << "Failed to get lock\n";
-        return -1;
+        return LOCK_FAIL;
     }
 
     std::string statement = Database::FormStatement_InitSchema(schema->tables);    
 
     std::cout << "For chris purposes, here is the statement:" << statement << "\n";
     
-    int sqliteResult = Database::Init(pathToDb, Constants::databaseName, false);
-    
-    if (sqliteResult != SQLITE_OK){
-        std::cerr << "Sqlite bad, here is the result: " << sqliteResult << "\n";
-        return sqliteResult;
+    if (Database::Init(dbPath, Constants::databaseName, false) != SUCCESS){
+        std::cerr << "Could not initialize empty database\n";
+        return CREATE_DATABASE_FAIL;
     }
     
-    sqliteResult = Database::RunStatement(pathToDb, statement, false, NULL);
+    if (!Database::RunStatement(dbPath, statement, false, NULL)){
+        std::cerr << "Could not run statement against the database\n";
+        return GENERIC_SQLITE_FAIL;
+    }
 
-    std::cout << "For chris purposes, here is the sqlite result: " << sqliteResult << "\n";
+    std::cout << "Boilerplate: it seems to have worked?\n";
     
     Lock::releaseLock(lock);
-    return sqliteResult;
+    return SUCCESS;
 }

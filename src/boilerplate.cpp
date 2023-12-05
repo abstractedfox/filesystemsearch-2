@@ -17,9 +17,10 @@ void testDb(){
     //Schema* schematime = &Schemas::testSchema;
     std::cout << "sizey " << Schemas::schemaTemplate.tables.size() << "\n";
     
+    DbPath dbPath = {"", "testdb.sqlite3"};
     std::string path = "";
     std::string filename = "testdb.sqlite3";
-    std::string pathOfDb = path + filename;
+    std::string pathOfDb = dbPath.pathToDb + dbPath.dbFilename;
     /*
     if(Database::Init(path, filename)){
         std::cout << "Database initialized\n";
@@ -41,7 +42,7 @@ void testDb(){
     testTable1.columnIndexAsPkey = 4;
     */
 
-    Database::Migrate(pathOfDb, &Schemas::schema1);
+    Database::Migrate(dbPath, &Schemas::schema1);
     
     //Database::RunStatement(pathOfDb, initStatement, true, NULL);
 }

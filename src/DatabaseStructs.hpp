@@ -7,7 +7,17 @@
 
 class Schema; //forward declaration for Migration typedef
 
-typedef int (*Migration)(std::string pathToDb, const Schema* schema);
+typedef int SqliteResult;
+
+struct DbPath{
+    std::string pathToDb; //Path to the directory containing the database
+    std::string dbFilename; //The filename of the database
+    std::string fullPathToDb(){
+        return pathToDb + dbFilename;
+    }
+};
+
+typedef int (*Migration)(DbPath dbPath, const Schema* schema);
 
 struct Column{
     bool UNIQUE;
@@ -41,5 +51,6 @@ public:
     Migration migration;
     Schema* next;
 };
+
 
 #endif
