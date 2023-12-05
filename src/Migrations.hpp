@@ -9,7 +9,7 @@
 
 class Migrations{
 public:
-    static int migration1(DbPath dbPath, const Schema* schema);
+    static Result migration1(DbPath dbPath, const Schema* schema);
 };
 
 #endif

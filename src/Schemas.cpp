@@ -14,19 +14,33 @@ const Schema Schemas::schema1 = {
     //Table vector
     {
         //instances of Table
-        {
-            "tableName",
+        Table {
+            "Files",
             //Column vector
             {
                 //instances of Column
-                {
+                Column {
+                    true, //UNIQUE
+                    true, //NOT_NULL
+                    "varchar",
+                    "Path"
+                },
+                ColumnFkey {
+                    false, //UNIQUE
+                    true, //NOT_NULL
+                    "boolean",
+                    "IsDirectory",
+                    "VolumeTags",
+                    "Name"
+                },
+                Column {
                     false, //UNIQUE
                     false, //NOT_NULL
                     "varchar",
-                    "columnName"
+                    "TimestampLastModified"
                 }
             },
-            -1 //pkey as an index in the columns vector
+            0 //pkey as an index in the columns vector
         }
     },
     &Migrations::migration1,

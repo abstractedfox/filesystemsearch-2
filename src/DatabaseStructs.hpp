@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "Migrations.hpp"
+#include "Constants.hpp"
 
 #ifndef DatabaseStructs_hpp
 #define DatabaseStructs_hpp
@@ -17,7 +18,7 @@ struct DbPath{
     }
 };
 
-typedef int (*Migration)(DbPath dbPath, const Schema* schema);
+typedef Result (*Migration)(DbPath dbPath, const Schema* schema);
 
 struct Column{
     bool UNIQUE;
@@ -35,6 +36,11 @@ struct Column{
         }
         return false;
     }
+};
+
+struct ColumnFkey : Column{
+    std::string foreignKeyTable;
+    std::string foreignKeyColumn;
 };
 
 class Table{
