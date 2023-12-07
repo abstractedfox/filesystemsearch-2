@@ -25,6 +25,7 @@ std::string Database::FormStatement_InitSchema(std::vector<Table> Tables){
         statement.append(" (");
         
         for (int i = 0; i < table.columns.size(); i++){
+            /*
             std::string isUnique = "";
             std::string isNotNull = "";
             std::string isPrimaryKey = "";
@@ -36,15 +37,13 @@ std::string Database::FormStatement_InitSchema(std::vector<Table> Tables){
             }
             if (table.columnIndexAsPkey  == i){
                 isPrimaryKey = "PRIMARY KEY ";
-            }
+            }*/
             statement.append(table.columns[i].name);
             statement.append(" ");
-            statement.append(table.columns[i].sqlDatatype);
+            statement.append(table.columns[i].sqlType);
             statement.append(" ");
             
-            statement.append(isUnique);
-            statement.append(isNotNull);
-            statement.append(isPrimaryKey);
+            statement.append(table.columns[i].constraints);
             
             if (i != table.columns.size() - 1){
                 statement.append(", ");

@@ -18,9 +18,11 @@ void testDb(){
     std::cout << "sizey " << Schemas::schemaTemplate.tables.size() << "\n";
     
     DbPath dbPath = {"", "testdb.sqlite3"};
+/*
     std::string path = "";
     std::string filename = "testdb.sqlite3";
-    std::string pathOfDb = dbPath.pathToDb + dbPath.dbFilename;
+    std::string pathOfDb = dbPath.pathToDb + dbPath.dbFilename;*/
+
     /*
     if(Database::Init(path, filename)){
         std::cout << "Database initialized\n";

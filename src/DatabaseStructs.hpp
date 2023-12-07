@@ -20,40 +20,23 @@ struct DbPath{
 
 typedef Result (*Migration)(DbPath dbPath, const Schema* schema);
 
-struct Column {
-    bool UNIQUE;
-    bool NOT_NULL;
-    std::string sqlDatatype;
+class Column{
+public:
     std::string name;
-    
-    //note for posterity: second 'const' applies to 'this'
-    bool operator==(const Column& compare) const{
-        if (UNIQUE == compare.UNIQUE
-            && NOT_NULL == compare.NOT_NULL
-            && sqlDatatype == compare.sqlDatatype
-            && name == compare.name){
-            return true;
-        }
-        return false;
-    }
-
-};
-
-struct ColumnFkey : Column{
-    std::string foreignKeyTable;
-    std::string foreignKeyColumn;
-
+    std::string sqlType;
+    std::string constraints;
 };
 
 class Table{
 public:
     std::string name;
+    //std::vector<Column> columns;
     std::vector<Column> columns;
-    int columnIndexAsPkey;
 };
 
 class Schema{
 public:
+    int ID;
     std::vector<Table> tables;
     
     Migration migration;

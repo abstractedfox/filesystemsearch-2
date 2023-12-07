@@ -8,10 +8,10 @@ Result Migrations::migration1(DbPath dbPath, const Schema* schema){
         std::cerr << "Failed to get lock\n";
         return LOCK_FAIL;
     }
-
+    
     std::string statement = Database::FormStatement_InitSchema(schema->tables);    
 
-    std::cout << "For chris purposes, here is the statement:" << statement << "\n";
+    std::cout << "Statement being applied:" << statement << "\n";
     
     if (Database::Init(dbPath, Constants::databaseName, false) != SUCCESS){
         std::cerr << "Could not initialize empty database\n";

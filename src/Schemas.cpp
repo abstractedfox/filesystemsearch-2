@@ -7,49 +7,66 @@
 
 #include "Schemas.hpp"
 
-//Usage note: The purpose of these is to have a representation of the schema in software so it can determine whether the database matches a known schema, and migrate it if necessary.
-//Each schema should have a pointer to a function matching the 'Migration' typedef that, when run against the database, either initializes that schema or migrates that schema from the previous one
-
 const Schema Schemas::schema1 = {
+    0, //ID
     //Table vector
-    std::vector<Table> {
+    {
         //instances of Table
-        Table {
-            "Files",
-            //Column vector
-            std::vector<Column> {
-                //instances of Column
-                Column {
-                    true, //UNIQUE
-                    true, //NOT_NULL
-                    "varchar",
-                    "Path"
-                },
-                ColumnFkey {
-                    false, //UNIQUE
-                    true, //NOT_NULL
-                    "boolean",
-                    "IsDirectory",
-                    "VolumeTags",
-                    "Name"
-                },
-                Column {
-                    false, //UNIQUE
-                    false, //NOT_NULL
-                    "varchar",
-                    "TimestampLastModified"
+        {
+            "VolumeTags",
+            {
+                {
+                    "Name",
+                    "TEXT",
+                    "UNIQUE NOT NULL"
                 }
             },
-            0 //pkey as an index in the columns vector
-        }
+        },
+        {
+            "Files",
+            //Column vector
+            {
+                //instances of Column
+                {
+                    "Path",
+                    "TEXT",
+                    "UNIQUE NOT NULL"
+                },
+                {
+                    "IsDirectory",
+                    "INTEGER",
+                    "NOT NULL"
+                },
+                {
+                    "FkVolumeTag",
+                    "TEXT",
+                    "NOT NULL"
+                },
+                {
+                    "Checksum",
+                    "BLOB",
+                    ""
+                },
+                {
+                    "LastModified",
+                    "TEXT",
+                    ""
+                },
+                {
+                    "FOREIGN KEY(FkVolumeTag) REFERENCES VolumeTags(Name)",
+                    "",
+                    ""
+                },
+            },
+        },
     },
-    &Migrations::migration1,
+    &Migrations::migration1, //ptr to init or migration function
     NULL //ptr to next schema
 };
 
-
 /*For future sanity, here's a template of an entirely empty schema*/
 const Schema Schemas::schemaTemplate = {
+    -1, //ID
     //Table vector
     {
         //instances of Table
@@ -59,15 +76,14 @@ const Schema Schemas::schemaTemplate = {
             {
                 //instances of Column
                 {
-                    false, //UNIQUE
-                    false, //NOT_NULL
-                    "varchar",
-                    "columnName"
+                    "columnName",
+                    "TEXT",
+                    ""
                 }
             },
-            -1 //pkey as an index in the columns vector
         }
     },
     NULL, //ptr to init or migration function
     NULL //ptr to next schema
 };
+
