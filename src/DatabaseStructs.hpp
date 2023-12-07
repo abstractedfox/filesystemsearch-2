@@ -20,7 +20,7 @@ struct DbPath{
 
 typedef Result (*Migration)(DbPath dbPath, const Schema* schema);
 
-struct Column{
+struct Column {
     bool UNIQUE;
     bool NOT_NULL;
     std::string sqlDatatype;
@@ -36,11 +36,13 @@ struct Column{
         }
         return false;
     }
+
 };
 
 struct ColumnFkey : Column{
     std::string foreignKeyTable;
     std::string foreignKeyColumn;
+
 };
 
 class Table{

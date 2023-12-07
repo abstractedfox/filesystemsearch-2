@@ -22,8 +22,6 @@ Result Migrations::migration1(DbPath dbPath, const Schema* schema){
         std::cerr << "Could not run statement against the database\n";
         return GENERIC_SQLITE_FAIL;
     }
-
-    std::cout << "Boilerplate: it seems to have worked?\n";
     
     Lock::releaseLock(lock);
     return SUCCESS;

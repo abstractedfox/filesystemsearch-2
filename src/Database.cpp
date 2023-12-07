@@ -34,7 +34,7 @@ std::string Database::FormStatement_InitSchema(std::vector<Table> Tables){
             if (table.columns[i].NOT_NULL){
                 isNotNull = "NOT NULL ";
             }
-            if (table.columnIndexAsPkey > -1){
+            if (table.columnIndexAsPkey  == i){
                 isPrimaryKey = "PRIMARY KEY ";
             }
             statement.append(table.columns[i].name);
@@ -84,7 +84,7 @@ Result Database::RunStatement(DbPath dbPath, std::string statement, bool handleO
     result = sqlite3_exec(dbHandle, statement.c_str(), callback, NULL, NULL);
     
     if (result != SQLITE_OK){
-        std::cerr << "Could not execute statement. SQLite returned error " << result << ". Here is the statement:\n";
+        std::cerr << "Could not execute statement. SQLite returned error " << result << ". Here is the statement:\n" << statement << "\n";
         if (handleOwnLock){
             Lock::releaseLock(lock);
         }

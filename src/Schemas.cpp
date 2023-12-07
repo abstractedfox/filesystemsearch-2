@@ -12,12 +12,12 @@
 
 const Schema Schemas::schema1 = {
     //Table vector
-    {
+    std::vector<Table> {
         //instances of Table
         Table {
             "Files",
             //Column vector
-            {
+            std::vector<Column> {
                 //instances of Column
                 Column {
                     true, //UNIQUE
