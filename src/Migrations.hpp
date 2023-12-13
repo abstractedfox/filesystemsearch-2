@@ -10,6 +10,7 @@
 class Migrations{
 public:
     static Result migration1(DbPath dbPath, const Schema* schema);
+    static Result localConfig1(DbPath dbPath, const Schema* schema);
 };
 
 #endif

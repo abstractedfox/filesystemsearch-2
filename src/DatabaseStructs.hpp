@@ -30,7 +30,6 @@ public:
 class Table{
 public:
     std::string name;
-    //std::vector<Column> columns;
     std::vector<Column> columns;
 };
 

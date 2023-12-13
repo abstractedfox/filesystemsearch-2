@@ -18,10 +18,11 @@
 
 class Database{
 public:
-    static void Migrate(DbPath dbPath, const Schema* schema);
+    static Result Migrate(DbPath dbPath, const Schema* schema);
     static std::string FormStatement_InitSchema(std::vector<Table> Tables);
+    static void SqliteCallback_PlaceInBuffer(std::vector<std::string>& columns, std::vector<std::string>& contents);
     static Result RunStatement(DbPath dbPath, std::string statement, bool handleOwnLock, int (*callback)(void*, int, char**, char**));
-    static Result Init(DbPath dbPath, std::string filename, bool handleOwnLock);
+    static Result Init(DbPath dbPath, bool handleOwnLock);
 };
 
 #endif /* Database_hpp */

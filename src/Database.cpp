@@ -7,8 +7,8 @@
 
 #include "Database.hpp"
 
-void Database::Migrate(DbPath dbPath, const Schema* schema){
-    schema->migration(dbPath, schema);
+Result Database::Migrate(DbPath dbPath, const Schema* schema){
+    return schema->migration(dbPath, schema);
 }
 
 //Form a statement that initializes a database schema (only creates the statement, doesn't run it)
@@ -25,19 +25,6 @@ std::string Database::FormStatement_InitSchema(std::vector<Table> Tables){
         statement.append(" (");
         
         for (int i = 0; i < table.columns.size(); i++){
-            /*
-            std::string isUnique = "";
-            std::string isNotNull = "";
-            std::string isPrimaryKey = "";
-            if (table.columns[i].UNIQUE){
-                isUnique = "UNIQUE ";
-            }
-            if (table.columns[i].NOT_NULL){
-                isNotNull = "NOT NULL ";
-            }
-            if (table.columnIndexAsPkey  == i){
-                isPrimaryKey = "PRIMARY KEY ";
-            }*/
             statement.append(table.columns[i].name);
             statement.append(" ");
             statement.append(table.columns[i].sqlType);
@@ -55,7 +42,7 @@ std::string Database::FormStatement_InitSchema(std::vector<Table> Tables){
     return statement;
 }
 
-//Note: because I can't find it in the actual sqlite documentation anywhere,
+//for posterity:
 //the arguments for the sqlite3_exec callback (and thus the callback in RunStatement) are, according to exactly one person on stackoverflow:
 //'unused, see documentation') (which??)
 //'count' number of columns in the result set
@@ -99,7 +86,7 @@ Result Database::RunStatement(DbPath dbPath, std::string statement, bool handleO
 }
 
 //Create a new database file if one doesn't exist
-Result Database::Init(DbPath dbPath, std::string filename, bool handleOwnLock){
+Result Database::Init(DbPath dbPath, bool handleOwnLock){
     LockObject* lock;
     if (handleOwnLock){
         lock = Lock::getLock(dbPath.pathToDb, Constants::lockFileName);

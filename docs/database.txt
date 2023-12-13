@@ -1,0 +1,24 @@
+Database:
+There are a few files of interest here:
+Database.cpp
+DatabaseStructs.hpp
+Migrations.cpp
+Schemas.cpp
+
+Here's a little more detail on each one:
+Database.cpp:
+Static functions concerning operations that are specific to the database or database maintenance. This is where we'd like to wrap all of our actual queries and other SQL-specific tasks.
+
+DatabaseStructs.hpp:
+Classes and structs related to database actions. Most are fairly self-explanatory, but take note of:
+DbPath: Seems arbitrary, but exists to prevent a code clarity problem ("is this the database's full path or the path containing the database?")
+Schema: Representation of a database schema. Holds a reference to a Migration which can be called to implement it.
+Migration: A function that implements a specific schema.
+
+Schemas.cpp: A collection of hard-coded instances of Schema
+
+Migrations.cpp: A collection of hard-coded instances of migrations
+
+The objective of this is to be able to hard-code the desired database schema as part of the binary, as well as the specific logic needed to migrate through each schema, so that a running instance of File System Search can update its database if it finds itself running with a database schema from an older version. New schemas should be written in addition to old ones (rather than replacing them) with their pointers placed in the 'Schema* next' field of the last schema.
+
+The usage of a migration looks a little funny; they're passed a pointer to their own schema as an argument. Fortunately this behavior is baked in in Database::Migrate, so in practice, all you need to do is call that with an appropriate dbPath.

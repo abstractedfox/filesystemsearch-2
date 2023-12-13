@@ -14,6 +14,7 @@
 class Schemas{
 public:
     static const Schema schema1;
+    static const Schema localConfig1;
     static const Schema schemaTemplate;
 };
 

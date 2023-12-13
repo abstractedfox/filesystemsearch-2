@@ -64,14 +64,13 @@ const Schema Schemas::schema1 = {
     NULL //ptr to next schema
 };
 
-/*For future sanity, here's a template of an entirely empty schema*/
-const Schema Schemas::schemaTemplate = {
-    -1, //ID
+const Schema Schemas::localConfig1 = {
+    0, //ID
     //Table vector
     {
         //instances of Table
         {
-            "tableName",
+            "VolumeTags",
             //Column vector
             {
                 //instances of Column
@@ -79,6 +78,29 @@ const Schema Schemas::schemaTemplate = {
                     "columnName",
                     "TEXT",
                     ""
+                }
+            },
+        }
+    },
+    &Migrations::localConfig1, //ptr to init or migration function
+    NULL //ptr to next schema
+};
+
+
+
+/*For future sanity, here's a template of an entirely empty schema*/
+const Schema Schemas::schemaTemplate = {
+    -1, //ID
+    //Table vector
+    {
+        //instances of Table
+        {
+            "VolumeTags",
+            {
+                {
+                    "Name",
+                    "TEXT",
+                    "UNIQUE NOT NULL"
                 }
             },
         }
