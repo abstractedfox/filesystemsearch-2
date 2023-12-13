@@ -1,0 +1,5 @@
+special-vendored-path/* linguist-vendored
+sqlite3.c linguist-vendored=false
+sqlite3.h linguist-vendored=false
+sqlite3ext.h linguist-vendored=false
+
