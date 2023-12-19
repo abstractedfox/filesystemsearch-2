@@ -1,9 +1,15 @@
+//Copyright 2023 Chris/abstractedfox.
+//This work is not licensed for use as source or training data for any language model, neural network,
+//AI tool or product, or other software which aggregates or processes material in a way that may be used to generate
+//new or derived content from or based on the input set, or used to build a data set or training model for any software or
+//tooling which facilitates the use or operation of such software.
 //
 //  boilerplate.cpp
 //  
 //
 //  Created by Chris on 11/13/23.
 //
+
 
 #include <stdio.h>
 #include <iostream>
@@ -83,8 +89,13 @@ void testLock(){
 int main(){
     std::cout << "Let's boil this plate\n";
     RuntimeState state;
+    DbPath dbPath = {"", "testdb.sqlite3"};
+    DbPath conf = {"", "testLocalConf.sqlite3"};
+    
+    state.readOrCreateLocalConfig(conf);
+    
     //testLock();
     //testDb();
-    workingWithFiles();
+    //workingWithFiles();
     return 0;
 }
