@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <vector>
+
 #include "Migrations.hpp"
 #include "Constants.hpp"
 
@@ -14,8 +15,10 @@
 
 class Schema; //forward declaration for Migration typedef
 
+//For code clarity (ie making it clear whether a function is returning a 'Result' as defined in Constants.hpp or an SQLite result
 typedef int SqliteResult;
 
+//A path to a database; mostly for clarity purposes (ie making it clearer when the path being asked for should be to a database, and making it harder to get mixed up over whether a path is to a directory containing a database or to an actual database file)
 struct DbPath{
     std::string pathToDb; //Path to the directory containing the database
     std::string dbFilename; //The filename of the database
@@ -28,11 +31,13 @@ typedef Result (*Migration)(DbPath dbPath, const Schema* schema);
 
 typedef int (*SqliteCallback)(void*, int, char**, char**);
 
+//A convenient struct for holding the values returned by sqlite3_exec
 struct QueryOutput{
     std::vector<std::string> columnName;
     std::vector<std::string> columnData;
 };
 
+//A column in a database
 class Column{
 public:
     std::string name;
@@ -40,6 +45,7 @@ public:
     std::string constraints;
 };
 
+//A table in a database
 class Table{
 public:
     std::string name;
@@ -54,6 +60,12 @@ public:
     
     Migration migration;
     Schema* next;
+};
+
+//Class for associating an abstracted volume tag with the path of a specific, real volume on a specific machine
+class VolumeTag{
+    std::string tag;
+    std::string realPath;
 };
 
 

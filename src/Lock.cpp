@@ -11,7 +11,11 @@
 //
 
 #include "Lock.hpp"
-#include "LockObject.hpp"
+
+LockObject::LockObject(int setValue, std::string fullPath){
+    value = setValue;
+    path = fullPath;
+}
 
 //If successful, receive a LockObject. Generates its own random value for the lock.
 LockObject* Lock::getLock(std::string path, std::string filename){

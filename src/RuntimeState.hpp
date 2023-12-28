@@ -14,10 +14,11 @@
 #define RuntimeState_hpp
 
 #include <stdio.h>
-#include "LocalConfig.hpp"
-#include "Constants.hpp"
 #include <string>
 #include <fstream>
+
+#include "LocalConfig.hpp"
+#include "Constants.hpp"
 #include "DatabaseStructs.hpp"
 #include "Database.hpp"
 #include "Schemas.hpp"

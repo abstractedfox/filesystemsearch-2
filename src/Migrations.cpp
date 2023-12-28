@@ -5,6 +5,7 @@
 //tooling which facilitates the use or operation of such software.
 #include "Migrations.hpp"
 
+//A 'migration' in this context is the function implementing a 'Schema' object. Each migration is specific to a schema and vice versa, with each Schema holding a reference to the migration that implements it.
 
 Result Migrations::migration1(DbPath dbPath, const Schema* schema){
     LockObject* lock;

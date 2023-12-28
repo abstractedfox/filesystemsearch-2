@@ -12,6 +12,8 @@
 
 #include "Schemas.hpp"
 
+//Each 'schema' is an object describing a database schema. Each one holds a reference to a specific instance of 'Migrations' that implements it, as well as an optional reference to the next 'Schema' that would succeed it. 
+
 const Schema Schemas::schema1 = {
     0, //ID
     //Table vector

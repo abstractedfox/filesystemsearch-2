@@ -14,7 +14,6 @@
 #define Lock_hpp
 
 #include <stdio.h>
-#include "LockObject.hpp"
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -22,6 +21,15 @@
 #include "limits.h"
 #include <chrono>
 #include "Constants.hpp"
+
+
+class LockObject{
+public:
+    int value = 0;
+    std::string path;
+    
+    LockObject(int setValue, std::string fullPath);
+};  
 
 //For preventing collisions when multiple instances of file system search want to access the same data store (ie if the database is kept on a network share)
 class Lock{

@@ -3,23 +3,11 @@
 //AI tool or product, or other software which aggregates or processes material in a way that may be used to generate
 //new or derived content from or based on the input set, or used to build a data set or training model for any software or
 //tooling which facilitates the use or operation of such software.
-//
-//  Database.cpp
-//  
-//
-//  Created by Chris on 11/21/23.
-//
 
 #include "Database.hpp"
 
-
-//for posterity:
-//the arguments for the sqlite3_exec callback (and thus the callback in RunStatement) are, according to exactly one person on stackoverflow:
-//'unused' this argument is passed to the callback by sqlite3_exec and contains whatever was passed to sqlite3_exec as its 4th argument (ie so you can actually use the data it's passed)
-//'count' number of rows in the result set
-//'data' the row's data
-//'columns' the column names
-
+//Callback for sqlite3_exec
+//'outputBufferAsQueryOutput' is an output buffer as a QueryOutput object; it's a void* because this value is passed through sqlite to get here
 int Database::Callback(void* outputBufferAsQueryOutput, int count, char** columnData, char** columnName){
     QueryOutput* output = (QueryOutput*)outputBufferAsQueryOutput;
     for (int i = 0; i < count; i++){
@@ -41,6 +29,7 @@ int Database::Callback(void* outputBufferAsQueryOutput, int count, char** column
     return 0;
 }
 
+//Selects the contents of the 'VolumeTags' table from the database referenced by dbPath, and returns the results in queryOutput
 Result Database::SelectVolumeTags(DbPath dbPath, QueryOutput& queryOutput){
     const std::string statement = "SELECT * FROM VolumeTags";
     return Database::RunStatement(dbPath, statement, true, queryOutput);
@@ -117,6 +106,7 @@ Result Database::RunStatement(DbPath dbPath, std::string statement, bool handleO
     return SUCCESS;
 }
 
+//Revised version of this function which uses Database::Callback to retrieve data from sqlite3_exec, and returns the results to queryOutput
 Result Database::RunStatement(DbPath dbPath, std::string statement, bool handleOwnLock, QueryOutput& queryOutput){
     LockObject* lock;
     if (handleOwnLock){
@@ -189,3 +179,11 @@ Result Database::Init(DbPath dbPath, bool handleOwnLock){
     }
     return SUCCESS;
 }
+
+
+//for posterity:
+//the arguments for the sqlite3_exec callback (and thus the callback in RunStatement) are, according to exactly one person on stackoverflow:
+//'unused' this argument is passed to the callback by sqlite3_exec and contains whatever was passed to sqlite3_exec as its 4th argument (ie so you can actually use the data it's passed)
+//'count' number of rows in the result set
+//'data' the row's data
+//'columns' the column names

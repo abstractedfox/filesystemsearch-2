@@ -10,6 +10,7 @@
 #include <vector>
 #include <filesystem>
 
+//'File System Search file'. A class for containing info about a file
 class Fss_File{
 public:
     std::string fullPath;

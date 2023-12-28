@@ -15,7 +15,6 @@
 #include <iostream>
 #include <random>
 #include "Lock.hpp"
-#include "LockObject.hpp"
 #include "Database.hpp"
 #include "Schemas.hpp"
 #include "Fss_File.hpp"

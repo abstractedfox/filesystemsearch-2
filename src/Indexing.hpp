@@ -15,10 +15,11 @@
 
 #include <stdio.h>
 #include <vector>
-#include "Fss_File.hpp"
 #include <string>
 #include <iostream>
 #include <exception>
+
+#include "Fss_File.hpp"
 
 class Indexing{
 public:
