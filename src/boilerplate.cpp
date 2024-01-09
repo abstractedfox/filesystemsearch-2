@@ -14,14 +14,16 @@
 #include <stdio.h>
 #include <iostream>
 #include <random>
+#include <filesystem>
+
+#include "Indexing.hpp"
+#include "RuntimeState.hpp"
 #include "Lock.hpp"
 #include "Database.hpp"
 #include "Schemas.hpp"
 #include "Fss_File.hpp"
-#include <filesystem>
-#include "Indexing.hpp"
-#include "RuntimeState.hpp"
 
+/*
 int callbackTest(void* idk, int columns, char** columnContents, char** columnNames){
     std::cout << "callback start!\n";
     std::cout << "columns in result: " << columns << "\n";
@@ -41,7 +43,7 @@ int callbackTest(void* idk, int columns, char** columnContents, char** columnNam
     }
     std::cout << "callback end!\n";
     return 0;
-}
+}*/
 
 void workingWithFiles(){
     std::filesystem::path thisPath = { "." };
@@ -59,7 +61,8 @@ void testDb(){
     
     std::string testStatement = "select * from sqlite_master";
     
-    std::cout << "Run test statement result code: " << Database::RunStatement(dbPath, testStatement, true, &callbackTest);
+    /*
+    std::cout << "Run test statement result code: " << Database::RunStatement(dbPath, testStatement, true, &callbackTest);*/
 }
 
 void testLock(){

@@ -18,7 +18,6 @@ std::vector<Fss_File> Indexing::GetFilesFromDirectory(std::string path){
     std::vector<Fss_File> files;
     try{
         for(std::filesystem::directory_entry item : std::filesystem::recursive_directory_iterator(path)){
-            
             Fss_File newfile;
         }
     }

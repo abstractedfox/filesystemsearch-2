@@ -54,6 +54,8 @@ LockObject* Lock::getLock(std::string path, std::string filename, int lockValue)
     int size = writeLockFile.tellp();
 
     writeLockFile.close();    
+    
+    for (int i = 0; i < INT_MAX; i++);
 
     char* buffer = new char[size];
 
@@ -71,8 +73,11 @@ LockObject* Lock::getLock(std::string path, std::string filename, int lockValue)
         std::cerr << "Failed to read lock file\n";
         return NULL;
     }
-    
+    std::cout << __FILE__ << "time to stoi\n";
+    std::cout << "original value: " << lockValue << "\n";
+    std::cout << "gonna stoi this: [" << buffer<< "]\n";
     int deserialized = std::stoi(buffer);  
+    std::cout << __FILE__ << "we stoi\n";
     
     if (lockValue != deserialized){
         std::cerr << "Lock file does not match expected lock value\n";
