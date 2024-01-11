@@ -17,11 +17,16 @@
 #include <string>
 #include <fstream>
 
-#include "LocalConfig.hpp"
 #include "Constants.hpp"
 #include "DatabaseStructs.hpp"
 #include "Database.hpp"
 #include "Schemas.hpp"
+
+//A class for holding the contents of the local configuration for this instance of file system search
+class LocalConfig{
+public:
+    std::vector<VolumeTag> volumeTags;
+};
 
 //Class for holding any data that is specific to the state of File System Search at runtime (in other words, this is what we're doing instead of globals)
 class RuntimeState{

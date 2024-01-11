@@ -18,13 +18,14 @@ Result Migrations::migration1(DbPath dbPath, const Schema* schema){
     std::string statement = Database::FormStatement_InitSchema(schema->tables);    
 
     std::cout << "Statement being applied:" << statement << "\n";
-    
+
     if (Database::Init(dbPath, false) != SUCCESS){
         std::cerr << "Could not initialize empty database\n";
         return CREATE_DATABASE_FAIL;
     }
     
-    if (!Database::RunStatement(dbPath, statement, false, NULL)){
+    QueryOutput output;
+    if (!Database::RunStatement(dbPath, statement, false, output)){
         std::cerr << "Could not run statement against the database\n";
         return GENERIC_SQLITE_FAIL;
     }
@@ -51,7 +52,8 @@ Result Migrations::localConfig1(DbPath dbPath, const Schema* schema){
         return CREATE_DATABASE_FAIL;
     }
     
-    if (!Database::RunStatement(dbPath, statement, false, NULL)){
+    QueryOutput output;
+    if (!Database::RunStatement(dbPath, statement, false, output)){
         std::cerr << "Could not run statement against the database\n";
         return GENERIC_SQLITE_FAIL;
     }

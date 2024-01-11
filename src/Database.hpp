@@ -16,24 +16,27 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+
 #include "sqlite3.h"
 #include "DatabaseStructs.hpp"
 #include "Lock.hpp"
 #include "Constants.hpp"
+#include "Fss_File.hpp"
 
 //A class for actions against the database, and abstracting queries from the rest of the codebase
 class Database{
 public:
+    static Result AddFiles(DbPath dbPath, std::vector<Fss_File> files, bool handleOwnLock);
+
     static int Callback(void* outputBufferAsQueryOutput, int count, char** columnData, char** columnName);
     
+    static Result AddVolumeTag(DbPath localConfigDb, VolumeTag volumeTag);
     static Result GetVolumeTags(DbPath localConfigDb, std::vector<VolumeTag> &output);
-    static Result SelectVolumeTags(DbPath dbPath, QueryOutput& queryOutput);
     
     static Result Migrate(DbPath dbPath, const Schema* schema);
     
     static std::string FormStatement_InitSchema(std::vector<Table> Tables);
     
-    static Result RunStatement(DbPath dbPath, std::string statement, bool handleOwnLock, int (*callback)(void*, int, char**, char**));
     static Result RunStatement(DbPath dbPath, std::string statement, bool handleOwnLock, QueryOutput& queryOutput);
     
     static Result Init(DbPath dbPath, bool handleOwnLock);

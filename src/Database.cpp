@@ -6,6 +6,32 @@
 
 #include "Database.hpp"
 
+Result Database::AddFiles(DbPath dbPath, std::vector<Fss_File> files, bool handleOwnLock){
+    LockObject* lock;
+    if (handleOwnLock){
+        lock = Lock::getLock(dbPath.pathToDb, Constants::lockFileName);
+        if (lock == NULL){
+            std::cerr << "Failed to get lock\ns";
+            return LOCK_FAIL;
+        }
+    }
+
+    std::string statement = "INSERT INTO Files(Path, IsDirectory, FkVolumeTag, Checksum, LastModified) VALUES ";
+    
+    for (int i = 0; i < files.size(); i++){
+           
+    }
+
+    if (handleOwnLock){
+        Result lockReleaseResult = Lock::releaseLock(lock);
+        if (lockReleaseResult != SUCCESS){
+            return lockReleaseResult;
+        }
+    }
+
+    return SUCCESS;
+}
+
 //Callback for sqlite3_exec
 //'outputBufferAsQueryOutput' is an output buffer as a QueryOutput object; it's a void* because this value is passed through sqlite to get here
 int Database::Callback(void* outputBufferAsQueryOutput, int count, char** columnData, char** columnName){
@@ -30,7 +56,17 @@ int Database::Callback(void* outputBufferAsQueryOutput, int count, char** column
     return 0;
 }
 
-//Return any VolumeTags in the local config database
+Result Database::AddVolumeTag(DbPath localConfigDb, VolumeTag volumeTag){
+    std::string statement = "INSERT INTO VolumeTags(VolumeTag, RealPath) VALUES ('";
+    statement += volumeTag.tag + "', '" + volumeTag.realPath + "');";
+    
+    QueryOutput queryOutput;
+    Result result = Database::RunStatement(localConfigDb, statement, false, queryOutput);
+    
+    return result;
+}
+
+//Return any VolumeTags in a local config database. Result is returned into the vector passed to 'output'
 Result Database::GetVolumeTags(DbPath localConfigDb, std::vector<VolumeTag> &output){
     const std::string statement = "SELECT * FROM VolumeTags";
     QueryOutput queryOutput;
@@ -58,12 +94,6 @@ Result Database::GetVolumeTags(DbPath localConfigDb, std::vector<VolumeTag> &out
         output.push_back(tag);
     }
     return SUCCESS;
-}
-
-//Selects the contents of the 'VolumeTags' table from the database referenced by dbPath, and returns the results in queryOutput
-Result Database::SelectVolumeTags(DbPath dbPath, QueryOutput& queryOutput){
-    const std::string statement = "SELECT * FROM VolumeTags";
-    return Database::RunStatement(dbPath, statement, true, queryOutput);
 }
 
 Result Database::Migrate(DbPath dbPath, const Schema* schema){
@@ -101,43 +131,7 @@ std::string Database::FormStatement_InitSchema(std::vector<Table> Tables){
     return statement;
 }
 
-//Accepts a path to the database, opens a connection, and runs the statement
-Result Database::RunStatement(DbPath dbPath, std::string statement, bool handleOwnLock, int (*callback)(void*, int, char**, char**)){
-    LockObject* lock;
-    if (handleOwnLock){
-        lock = Lock::getLock(dbPath.pathToDb, Constants::lockFileName);
-        if (lock == NULL){
-            std::cerr << "Failed to get lock\ns";
-            return LOCK_FAIL;
-        }
-    }
-    
-    sqlite3* dbHandle;
-    int result = sqlite3_open_v2(dbPath.fullPathToDb().c_str(), &dbHandle, SQLITE_OPEN_READWRITE, NULL);
-    
-    if (result != SQLITE_OK){
-        std::cerr << "Database could not be opened, sqlite error code: " << result << "\n";
-    }
-
-    result = sqlite3_exec(dbHandle, statement.c_str(), callback, NULL, NULL);
-
-    if (result != SQLITE_OK){
-        std::cerr << "Could not execute statement. SQLite returned error " << result << ". Here is the statement:\n" << statement << "\n";
-        if (handleOwnLock){
-            Lock::releaseLock(lock);
-        }
-        return GENERIC_SQLITE_FAIL;
-    }
-    
-    if (handleOwnLock){
-        if (Lock::releaseLock(lock) != SUCCESS){
-            return LOCK_FAIL;
-        }
-    }
-    return SUCCESS;
-}
-
-//Revised version of this function which uses Database::Callback to retrieve data from sqlite3_exec, and returns the results to queryOutput
+//Uses Database::Callback to retrieve data using sqlite3_exec, and returns the results to queryOutput
 Result Database::RunStatement(DbPath dbPath, std::string statement, bool handleOwnLock, QueryOutput& queryOutput){
     LockObject* lock;
     if (handleOwnLock){
@@ -154,10 +148,8 @@ Result Database::RunStatement(DbPath dbPath, std::string statement, bool handleO
     if (result != SQLITE_OK){
         std::cerr << "Database could not be opened, sqlite error code: " << result << "\n";
     }
-    
 
     result = sqlite3_exec(dbHandle, statement.c_str(), &Database::Callback, &queryOutput, NULL);
-
     
     if (result != SQLITE_OK){
         std::cerr << "Could not execute statement. SQLite returned error " << result << ". Here is the statement:\n" << statement << "\n";

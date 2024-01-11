@@ -10,14 +10,19 @@
 #include <vector>
 #include <filesystem>
 
-//'File System Search file'. A class for containing info about a file
+//'File System Search file'. A class for containing info about a file.
+//An instance of Fss_File is immutable once constructed; this is to discourage usage that could result in discrepancies or confusion (ie modifying one and assuming it would modify the data in the database)
 class Fss_File{
 public:
-    std::string fullPath;
-    bool isDirectory;
-    std::string VolumeTag;
-    std::vector<int> checksum;
-    std::filesystem::file_time_type lastModified;
+    Fss_File(std::string fullPath, bool isDirectory, std::string VolumeTag, std::vector<int> checksum, std::filesystem::file_time_type lastModified, bool fromDb);
+
+    const std::string fullPath;
+    const bool isDirectory;
+    const std::string VolumeTag;
+    const std::vector<int> checksum;
+    const std::filesystem::file_time_type lastModified;
+
+    const bool fromDb; //Should be used to indicate whether this Fss_File was created from data in the database
 };
 
 #endif

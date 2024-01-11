@@ -30,7 +30,6 @@ Result RuntimeState::readOrCreateLocalConfig(DbPath dbPath){
 
     //Get contents of local config
     QueryOutput runtimeStateOutput;
-    //Result result = Database::SelectVolumeTags(dbPath, runtimeStateOutput);
     std::vector<VolumeTag> tags;
     Result result = Database::GetVolumeTags(dbPath, config.volumeTags);
 

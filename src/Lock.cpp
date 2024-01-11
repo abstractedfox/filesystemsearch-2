@@ -97,7 +97,7 @@ Result Lock::releaseLock(LockObject* lockObject){
     readLockFile.open(lockObject->path, std::ifstream::in);
     
     int length = std::to_string(lockObject->value).length();
-    //char* buffer = new char[length];
+
     std::unique_ptr buffer = std::make_unique<char[]>(length);    
 
     try{
@@ -119,15 +119,17 @@ Result Lock::releaseLock(LockObject* lockObject){
         }
         
         readLockFile.close();
-        //delete lockObject;
+        delete lockObject;
         return SUCCESS;
     }
     else{
         std::cerr << "Value in lockfile did not match expected value\n";
         readLockFile.close();
+        delete lockObject;
         return LOCK_FAIL;
     }
 
     readLockFile.close();
+    delete lockObject;
     return LOCK_FAIL;
 }

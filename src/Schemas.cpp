@@ -98,8 +98,6 @@ const Schema Schemas::localConfig1 = {
     NULL //ptr to next schema
 };
 
-
-
 /*For future sanity, here's a template of an entirely empty schema*/
 const Schema Schemas::schemaTemplate = {
     -1, //ID
