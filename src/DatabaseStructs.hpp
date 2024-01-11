@@ -64,6 +64,7 @@ public:
 
 //Class for associating an abstracted volume tag with the path of a specific, real volume on a specific machine
 class VolumeTag{
+public:
     std::string tag;
     std::string realPath;
 };

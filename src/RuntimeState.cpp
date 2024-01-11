@@ -18,7 +18,6 @@ RuntimeState::RuntimeState(){
 
 //If a local config exists at the given path, open it and set this RuntimeState's LocalConfig.volumeTags to any volume tags contained. If no config exists, make one.
 Result RuntimeState::readOrCreateLocalConfig(DbPath dbPath){
-    std::cout << "1\n";
     std::ifstream checkIfExists;
     checkIfExists.open(dbPath.fullPathToDb(), std::ifstream::in);
     
@@ -28,21 +27,15 @@ Result RuntimeState::readOrCreateLocalConfig(DbPath dbPath){
             return result;
         }
     }
-    
-    std::cout << "2\n";
 
     //Get contents of local config
     QueryOutput runtimeStateOutput;
-    Result result = Database::SelectVolumeTags(dbPath, runtimeStateOutput);
-    
-        std::cout << "3\n";
+    //Result result = Database::SelectVolumeTags(dbPath, runtimeStateOutput);
+    std::vector<VolumeTag> tags;
+    Result result = Database::GetVolumeTags(dbPath, config.volumeTags);
 
     if (result == SUCCESS){
-        std::cout << "we here\n";
-        for (int i = 0; i < runtimeStateOutput.columnName.size(); i++){
-            VolumeTag volume;
-            std::cout << i << ": " << runtimeStateOutput.columnName[i] << " | " << runtimeStateOutput.columnData[i] << "\n";
-        }
+        
     }
     else{
         std::cerr << "Could not load local config.\n";

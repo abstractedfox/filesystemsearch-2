@@ -27,7 +27,8 @@ enum Result{
     FAIL,
     CREATE_DATABASE_FAIL,
     LOCK_FAIL,
-    GENERIC_SQLITE_FAIL
+    GENERIC_SQLITE_FAIL,
+    INCORRECT_DATA_FAIL
 };
 
 #endif /* Constants_h */

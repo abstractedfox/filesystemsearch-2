@@ -36,54 +36,54 @@ LockObject* Lock::getLock(std::string path, std::string filename, int lockValue)
     checkIfExists.open(fullPath, std::ifstream::in);
     
     if (!checkIfExists.fail()){
-        std::cerr << "Lock file already exists; does someone else already have a lock?\n";
+        std::cerr << __FILE__ << " Lock file already exists; does someone else already have a lock?\n";
         return NULL;
     }
     
     std::fstream writeLockFile;
     writeLockFile.open(fullPath, std::fstream::out);
     if (writeLockFile.fail()){
-        std::cerr << "Creation of lock file failed\n";
+        std::cerr << __FILE__ << " Creation of lock file failed\n";
         return NULL;
     }
 
     LockObject* lockObject = new LockObject(lockValue, fullPath);
 
     writeLockFile << lockValue;
+    writeLockFile << '\0';
     
     int size = writeLockFile.tellp();
 
     writeLockFile.close();    
-    
-    for (int i = 0; i < INT_MAX; i++);
 
-    char* buffer = new char[size];
+    std::unique_ptr buffer = std::make_unique<char[]>(size);
 
     std::ifstream readLockFile;
     readLockFile.open(fullPath, std::istream::in);
     
     if (readLockFile.fail()){
         std::cerr << "Failed to open lock file\n";
+        readLockFile.close();
         return NULL;
     }
-    
-    readLockFile.seekg(0);
 
-    if (!readLockFile.read(buffer, size)){
+    readLockFile.seekg(0);
+    if (!readLockFile.read(buffer.get(), size)){
         std::cerr << "Failed to read lock file\n";
+        readLockFile.close();
         return NULL;
     }
-    std::cout << __FILE__ << "time to stoi\n";
-    std::cout << "original value: " << lockValue << "\n";
-    std::cout << "gonna stoi this: [" << buffer<< "]\n";
-    int deserialized = std::stoi(buffer);  
-    std::cout << __FILE__ << "we stoi\n";
+
+    int deserialized = std::stoi(buffer.get());  
+
     
     if (lockValue != deserialized){
         std::cerr << "Lock file does not match expected lock value\n";
+        readLockFile.close();
         return NULL;
     }
-
+    
+    readLockFile.close();
     return lockObject;
 }
 
@@ -97,30 +97,37 @@ Result Lock::releaseLock(LockObject* lockObject){
     readLockFile.open(lockObject->path, std::ifstream::in);
     
     int length = std::to_string(lockObject->value).length();
-    char* buffer = new char[length];
-    
+    //char* buffer = new char[length];
+    std::unique_ptr buffer = std::make_unique<char[]>(length);    
+
     try{
-        readLockFile.read(buffer, length);
+        readLockFile.read(buffer.get(), length);
     }
     catch(std::exception& e){
         std::cerr << "Exception thrown reading lock file into buffer; is the file too small?\n" << e.what() << "\n";
+        readLockFile.close();
+        return FAIL;
     }
     
-    int deserialized = std::stoi(buffer);
+    int deserialized = std::stoi(buffer.get());
     
     if (deserialized == lockObject->value){
         if (std::remove(lockObject->path.c_str()) != 0){
             std::cerr << "Failed to delete lock file\n";
+            readLockFile.close();
             return LOCK_FAIL;
         }
         
-        delete lockObject;
+        readLockFile.close();
+        //delete lockObject;
         return SUCCESS;
     }
     else{
         std::cerr << "Value in lockfile did not match expected value\n";
+        readLockFile.close();
         return LOCK_FAIL;
     }
 
+    readLockFile.close();
     return LOCK_FAIL;
 }

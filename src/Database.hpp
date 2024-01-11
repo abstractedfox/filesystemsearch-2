@@ -26,6 +26,7 @@ class Database{
 public:
     static int Callback(void* outputBufferAsQueryOutput, int count, char** columnData, char** columnName);
     
+    static Result GetVolumeTags(DbPath localConfigDb, std::vector<VolumeTag> &output);
     static Result SelectVolumeTags(DbPath dbPath, QueryOutput& queryOutput);
     
     static Result Migrate(DbPath dbPath, const Schema* schema);

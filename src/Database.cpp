@@ -9,11 +9,8 @@
 //Callback for sqlite3_exec
 //'outputBufferAsQueryOutput' is an output buffer as a QueryOutput object; it's a void* because this value is passed through sqlite to get here
 int Database::Callback(void* outputBufferAsQueryOutput, int count, char** columnData, char** columnName){
-    std::cout << "database.cpp callback print debugging time\n";
     QueryOutput* output = (QueryOutput*)outputBufferAsQueryOutput;
-    std::cout << "count value is : " << count << "\n";
     for (int i = 0; i < count; i++){
-        std::cout << "i : " << i << "\n";
         if (columnName[i] != NULL){
             output->columnName.push_back(columnName[i]);
         }
@@ -28,15 +25,43 @@ int Database::Callback(void* outputBufferAsQueryOutput, int count, char** column
             output->columnData.push_back("");
         }
     }
-    std::cout << "database.cpp callback print debugging complete\n";
 
     //note:sqlite stops the query if this returns nonzero
     return 0;
 }
 
+//Return any VolumeTags in the local config database
+Result Database::GetVolumeTags(DbPath localConfigDb, std::vector<VolumeTag> &output){
+    const std::string statement = "SELECT * FROM VolumeTags";
+    QueryOutput queryOutput;
+    Result queryResult = Database::RunStatement(localConfigDb, statement, true, queryOutput);
+    if (queryResult != SUCCESS){
+        return queryResult;
+    }
+    
+    for (int i = 0; i < queryOutput.columnName.size(); i += 2){
+        VolumeTag tag;
+        if (queryOutput.columnName[i] == "VolumeTag"){
+            tag.tag = queryOutput.columnData[i];
+        }
+        else{
+            std::cerr << __FILE__ << " Unexpected column name, expected VolumeTag and got " << queryOutput.columnName[i] << "\n";
+            return INCORRECT_DATA_FAIL;
+        }
+        if (queryOutput.columnName[i + 1] == "RealPath"){
+            tag.realPath = queryOutput.columnData[i + 1];
+        }
+        else{
+            std::cerr << __FILE__ << " Unexpected column name, expected RealPath and got " << queryOutput.columnName[i] << "\n";
+            return INCORRECT_DATA_FAIL;
+        }
+        output.push_back(tag);
+    }
+    return SUCCESS;
+}
+
 //Selects the contents of the 'VolumeTags' table from the database referenced by dbPath, and returns the results in queryOutput
 Result Database::SelectVolumeTags(DbPath dbPath, QueryOutput& queryOutput){
-    std::cout << "Database::SelectVolumeTags print debugging: we here\n";
     const std::string statement = "SELECT * FROM VolumeTags";
     return Database::RunStatement(dbPath, statement, true, queryOutput);
 }
@@ -114,10 +139,8 @@ Result Database::RunStatement(DbPath dbPath, std::string statement, bool handleO
 
 //Revised version of this function which uses Database::Callback to retrieve data from sqlite3_exec, and returns the results to queryOutput
 Result Database::RunStatement(DbPath dbPath, std::string statement, bool handleOwnLock, QueryOutput& queryOutput){
-    std::cout << "Database::RunStatement print debugging: we here\n";
     LockObject* lock;
     if (handleOwnLock){
-        std::cout << __FILE__ << " Database::RunStatement about to get lock\n";
         lock = Lock::getLock(dbPath.pathToDb, Constants::lockFileName);
         if (lock == NULL){
             std::cerr << "Failed to get lock\ns";
@@ -126,16 +149,15 @@ Result Database::RunStatement(DbPath dbPath, std::string statement, bool handleO
     }
     
     sqlite3* dbHandle;
-    std::cout << "Database::RunStatement print debugging: about to open db connection\n";
     int result = sqlite3_open_v2(dbPath.fullPathToDb().c_str(), &dbHandle, SQLITE_OPEN_READWRITE, NULL);
     
     if (result != SQLITE_OK){
         std::cerr << "Database could not be opened, sqlite error code: " << result << "\n";
     }
     
-    std::cout << "Database::RunStatement print debugging: about to do the thing\n";
+
     result = sqlite3_exec(dbHandle, statement.c_str(), &Database::Callback, &queryOutput, NULL);
-    std::cout << "Database::RunStatement print debugging: ok we got this far\n";
+
     
     if (result != SQLITE_OK){
         std::cerr << "Could not execute statement. SQLite returned error " << result << ". Here is the statement:\n" << statement << "\n";
