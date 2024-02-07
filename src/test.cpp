@@ -99,7 +99,7 @@ void testLocalConfig(){
     result = Database::GetVolumeTags(testConfig, volumetags);    
     passfail(result, __func__, "Database::GetVolumeTags");
     if (volumetags.size() != 2){
-        fail(__func__, "GetVolumeTags returned incorrect number of results, expected 2 and received " + volumetags.size()); 
+        fail(__func__, "GetVolumeTags returned incorrect number of results, expected 2 and received " + std::to_string(volumetags.size())); 
     }
 
 }

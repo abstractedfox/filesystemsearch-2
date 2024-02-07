@@ -15,14 +15,21 @@
 class Fss_File{
 public:
     Fss_File(std::string fullPath, bool isDirectory, std::string VolumeTag, std::vector<int> checksum, std::filesystem::file_time_type lastModified, bool fromDb);
+    
+    bool get_isDirectory() const;
+    std::string get_fullPath() const;
+    std::string get_VolumeTag() const;
+    std::vector<int> get_checksum() const;
+    std::filesystem::file_time_type get_lastModified() const;
 
-    const std::string fullPath;
-    const bool isDirectory;
-    const std::string VolumeTag;
-    const std::vector<int> checksum;
-    const std::filesystem::file_time_type lastModified;
+private:
+    bool isDirectory;
+    std::string fullPath;
+    std::string VolumeTag;
+    std::vector<int> checksum;
+    std::filesystem::file_time_type lastModified;
 
-    const bool fromDb; //Should be used to indicate whether this Fss_File was created from data in the database
+    bool fromDb; //Should be used to indicate whether this Fss_File was created from data in the database
 };
 
 #endif
