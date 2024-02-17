@@ -10,6 +10,8 @@
 #include <vector>
 #include <filesystem>
 
+#include "DatabaseStructs.hpp"
+
 //'File System Search file'. A class for containing info about a file.
 //An instance of Fss_File is immutable once constructed; this is to discourage usage that could result in discrepancies or confusion (ie modifying one and assuming it would modify the data in the database)
 class Fss_File{
@@ -17,15 +19,16 @@ public:
     Fss_File(std::string fullPath, bool isDirectory, std::string VolumeTag, std::vector<int> checksum, std::filesystem::file_time_type lastModified, bool fromDb);
     
     bool get_isDirectory() const;
-    std::string get_fullPath() const;
-    std::string get_VolumeTag() const;
+    std::string get_unresolvedPath() const;
+    VolumeTag_Name get_volumeTag() const;
     std::vector<int> get_checksum() const;
     std::filesystem::file_time_type get_lastModified() const;
+    bool isFromDb() const;
 
 private:
     bool isDirectory;
-    std::string fullPath;
-    std::string VolumeTag;
+    std::string unresolvedPath;
+    VolumeTag_Name volumeTag;
     std::vector<int> checksum;
     std::filesystem::file_time_type lastModified;
 

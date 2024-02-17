@@ -7,8 +7,8 @@
 #include <iostream>
 #include <vector>
 
-#include "Migrations.hpp"
 #include "Constants.hpp"
+#include "Fss_File.hpp"
 
 #ifndef DatabaseStructs_hpp
 #define DatabaseStructs_hpp
@@ -63,11 +63,15 @@ public:
 };
 
 //Class for associating an abstracted volume tag with the path of a specific, real volume on a specific machine
+//Should only be used in code associated with resolution of a VolumeTag to a real volume on a specific machine; if passing or retaining the value of a VolumeTag, use VolumeTag_Name
 class VolumeTag{
 public:
     std::string tag;
     std::string realPath;
 };
+
+//Used for holding a string that should resolve to a valid VolumeTag
+typedef std::string VolumeTag_Name;
 
 
 #endif
