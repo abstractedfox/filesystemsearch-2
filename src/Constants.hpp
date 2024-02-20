@@ -10,10 +10,10 @@
 //  Created by Chris on 11/26/23.
 //
 
-#include <string>
-
 #ifndef Constants_h
 #define Constants_h
+
+#include <string>
 
 namespace Constants{
     const std::string lockFileName = "fssLock";

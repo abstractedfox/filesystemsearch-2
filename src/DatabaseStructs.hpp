@@ -4,16 +4,17 @@
 //new or derived content from or based on the input set, or used to build a data set or training model for any software or
 //tooling which facilitates the use or operation of such software.
 
+#ifndef DatabaseStructs_hpp
+#define DatabaseStructs_hpp
+
 #include <iostream>
 #include <vector>
 
 #include "Constants.hpp"
-#include "Fss_File.hpp"
-
-#ifndef DatabaseStructs_hpp
-#define DatabaseStructs_hpp
+//#include "Fss_File.hpp"
 
 class Schema; //forward declaration for Migration typedef
+class Fss_File; //forward declaration to mitigate circular dependency
 
 //For code clarity (ie making it clear whether a function is returning a 'Result' as defined in Constants.hpp or an SQLite result
 typedef int SqliteResult;
@@ -62,16 +63,24 @@ public:
     Schema* next;
 };
 
+//Used for holding a string that should resolve to a valid VolumeTag
+typedef std::string VolumeTag_Name;
+
 //Class for associating an abstracted volume tag with the path of a specific, real volume on a specific machine
 //Should only be used in code associated with resolution of a VolumeTag to a real volume on a specific machine; if passing or retaining the value of a VolumeTag, use VolumeTag_Name
 class VolumeTag{
 public:
     std::string tag;
     std::string realPath;
+    
+    std::string resolve(VolumeTag_Name file){
+        if (file == tag){
+            return realPath + file;
+        }
+        return "";
+    }
 };
 
-//Used for holding a string that should resolve to a valid VolumeTag
-typedef std::string VolumeTag_Name;
 
 
 #endif

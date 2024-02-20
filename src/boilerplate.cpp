@@ -18,10 +18,6 @@
 
 #include "Indexing.hpp"
 #include "RuntimeState.hpp"
-#include "Lock.hpp"
-#include "Database.hpp"
-#include "Schemas.hpp"
-#include "Fss_File.hpp"
 
 /*
 int callbackTest(void* idk, int columns, char** columnContents, char** columnNames){
