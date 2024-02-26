@@ -28,7 +28,8 @@ enum Result{
     CREATE_DATABASE_FAIL,
     LOCK_FAIL,
     GENERIC_SQLITE_FAIL,
-    INCORRECT_DATA_FAIL
+    INCORRECT_DATA_FAIL,
+    VOLUME_TAG_ERROR
 };
 
 #endif /* Constants_h */

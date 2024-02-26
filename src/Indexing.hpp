@@ -18,12 +18,20 @@
 #include <string>
 #include <iostream>
 #include <exception>
+#include <memory>
 
 #include "Fss_File.hpp"
+#include "Constants.hpp"
 
 class Indexing{
 public:
     static std::vector<Fss_File> GetFilesFromDirectory(std::string path);
+    
+    //Create a Fss_File from a real path and a volumetag that resolves to the root of that path
+    
+    static Result createFss_File(std::string pathToFile, VolumeTag* volumeTag, std::unique_ptr<Fss_File> out);
+    
+    static std::string resolvePath(Fss_File* file, VolumeTag* volumeTag, char separatorCharacter);
 };
 
 #endif /* Indexing_hpp */

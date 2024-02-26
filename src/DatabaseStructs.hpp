@@ -68,17 +68,11 @@ typedef std::string VolumeTag_Name;
 
 //Class for associating an abstracted volume tag with the path of a specific, real volume on a specific machine
 //Should only be used in code associated with resolution of a VolumeTag to a real volume on a specific machine; if passing or retaining the value of a VolumeTag, use VolumeTag_Name
+//the RealPath variable should be a literal valid path on a machine, ending in its native separating character (ie a backslash for windows). This is unlike the unresolved paths stored in Fss_File, which should always use /
 class VolumeTag{
 public:
     std::string tag;
     std::string realPath;
-    
-    std::string resolve(VolumeTag_Name file){
-        if (file == tag){
-            return realPath + file;
-        }
-        return "";
-    }
 };
 
 

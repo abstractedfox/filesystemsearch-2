@@ -1,7 +1,22 @@
 #include "Fss_File.hpp"
-
+/*
 Fss_File::Fss_File(std::string unresolvedPath, bool isDirectory, VolumeTag_Name volumeTag, std::vector<int> checksum, std::filesystem::file_time_type lastModified, bool fromDb) : unresolvedPath(unresolvedPath), isDirectory(isDirectory), volumeTag(volumeTag), checksum(checksum), lastModified(lastModified), fromDb(fromDb){
     
+}*/
+
+Fss_File::Fss_File(std::string set_unresolvedPath, bool set_isDirectory, VolumeTag_Name set_VolumeTag, std::vector<int> set_checksum, std::filesystem::file_time_type set_lastModified, bool set_fromDb){
+    unresolvedPath = set_unresolvedPath;
+    isDirectory = set_isDirectory;
+    volumeTag = set_VolumeTag;
+    checksum = set_checksum;
+    lastModified = set_lastModified;
+    fromDb = set_fromDb;
+    
+    int backslashPos = unresolvedPath.find("\\");
+    while (backslashPos != std::string::npos){
+        unresolvedPath.replace(backslashPos, 1, "/");
+        backslashPos = unresolvedPath.find("\\");
+    }
 }
 
 bool Fss_File::get_isDirectory() const{
