@@ -29,7 +29,7 @@ public:
     
     //Create a Fss_File from a real path and a volumetag that resolves to the root of that path
     
-    static Result createFss_File(std::string pathToFile, VolumeTag* volumeTag, std::unique_ptr<Fss_File> out);
+    static Result createFss_File(std::string pathToFile, VolumeTag& volumeTag, std::unique_ptr<Fss_File>& out);
     
     static std::string resolvePath(Fss_File* file, VolumeTag* volumeTag, char separatorCharacter);
 };

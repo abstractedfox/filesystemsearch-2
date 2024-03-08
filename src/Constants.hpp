@@ -19,6 +19,7 @@ namespace Constants{
     const std::string lockFileName = "fssLock";
     const std::string databaseName = "fssDb.sqlite3";
     const std::string configName = "fssConfig.sqlite3";
+    const std::string SEPARATOR = "/";
 };
 
 enum Result{

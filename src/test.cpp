@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
+#include <memory>
 
 #include "RuntimeState.hpp"
 
@@ -101,10 +102,27 @@ void testLocalConfig(){
 
 }
 
+void testIndexing(){
+    VolumeTag volumeTagA = { "testrootpath", "/" };
+    std::unique_ptr<Fss_File> fssFileOut;
+    
+    //Incomplete test, need to test result and verify Fss_File properly represents the passed file
+    Result result = Indexing::createFss_File(testDb.fullPathToDb(), volumeTagA, fssFileOut);
+
+    if (result != SUCCESS){
+        fail(__func__, "Received status code of " + std::to_string(result) + " from createFss_File");
+    }
+}
+
 int main(){
+    testpath = std::filesystem::current_path();
+    testDb = { testpath, "testdb" };
+    testConfig = { testpath, "testconfig" };
+    
     testLock();
     testDatabase();
     testLocalConfig();
+    testIndexing();
 
     //remove the test db and config
     std::remove(testDb.fullPathToDb().c_str());

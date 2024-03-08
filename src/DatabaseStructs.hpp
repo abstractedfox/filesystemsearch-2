@@ -11,7 +11,6 @@
 #include <vector>
 
 #include "Constants.hpp"
-//#include "Fss_File.hpp"
 
 class Schema; //forward declaration for Migration typedef
 class Fss_File; //forward declaration to mitigate circular dependency
@@ -24,6 +23,9 @@ struct DbPath{
     std::string pathToDb; //Path to the directory containing the database
     std::string dbFilename; //The filename of the database
     std::string fullPathToDb(){
+        if (pathToDb.substr(pathToDb.length() - 1) != Constants::SEPARATOR){
+            return pathToDb + Constants::SEPARATOR + dbFilename;
+        }
         return pathToDb + dbFilename;
     }
 };

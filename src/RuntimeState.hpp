@@ -21,6 +21,7 @@
 #include "DatabaseStructs.hpp"
 #include "Database.hpp"
 #include "Schemas.hpp"
+#include "Indexing.hpp"
 
 //A class for holding the contents of the local configuration for this instance of file system search
 class LocalConfig{

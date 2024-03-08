@@ -29,14 +29,22 @@ std::vector<Fss_File> Indexing::GetFilesFromDirectory(std::string path){
     }
     return files;
 }
-/*
-Result Indexing::createFss_File(std::string pathToFile, VolumeTag* volumeTag, std::unique_ptr<Fss_File> out){
-        
-    if (pathToFile.find(volumeTag->realPath) != 0){
+
+//Create an instance of Fss_File representing a real file
+//Must be passed a valid volume tag for the volume the file is on
+Result Indexing::createFss_File(std::string pathToFile, VolumeTag& volumeTag, std::unique_ptr<Fss_File>& out){
+    
+    if (pathToFile.find(volumeTag.realPath) != 0){
+        std::cerr << "Could not find volume tag real path of [" << volumeTag.realPath << "] in file path [" << pathToFile << "]\n";
         return VOLUME_TAG_ERROR;
     }
     
-}*/
+    std::string unresolvedPath = pathToFile.substr(volumeTag.realPath.length());
+    
+    std::cout << __FILE__ << ": unresolvedPath: " << unresolvedPath << "\n";
+    
+    return DEFAULT;
+}
 
 //Resolve a real path from an instance of Fss_File and relevant VolumeTag.
 //Needs tests written
