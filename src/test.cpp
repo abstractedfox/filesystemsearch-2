@@ -1,11 +1,10 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <filesystem>
+#include <memory>
+#include <system_error>
 
-#include "Lock.hpp"
-#include "Database.hpp"
-#include "Migrations.hpp"
-#include "Schemas.hpp"
 #include "RuntimeState.hpp"
 
 std::string testpath = "";
@@ -89,8 +88,8 @@ void testLocalConfig(){
     Result result = state.readOrCreateLocalConfig(testConfig);
     passfail(result, __func__, "RuntimeState.readOrCreateLocalConfig");
     
-    VolumeTag tagA = {"coolvolume", "/"};
-    VolumeTag tagB = {"anothercoolvolume", "C:\""};
+    VolumeTag tagA("coolvolume", (std::string)"/");
+    VolumeTag tagB("anothercoolvolume", (std::string)"C:\\");
     Database::AddVolumeTag(testConfig, tagA);
     result = Database::AddVolumeTag(testConfig, tagB);
     passfail(result, __func__, "Database::AddVolumeTag");
@@ -104,10 +103,44 @@ void testLocalConfig(){
 
 }
 
+void testIndexing(){
+    bool verbose = false;
+
+    VolumeTag volumeTagA("testrootpath", (std::string)"/");
+    std::unique_ptr<Fss_File> fssFileOut;
+    
+    //test createFss_File / Fss_File instantiation
+    std::error_code error;
+    std::filesystem::directory_entry testfile(testDb.fullPathToDb(), error);
+    if (error){
+        fail(__func__, "Failed to instantiate std::filesystem::directory_entry for test database, with error value " + std::to_string(error.value()));
+    }
+    std::vector<int> dummyChecksum;
+    Result result = Indexing::createFss_File(testfile, volumeTagA, dummyChecksum, fssFileOut);
+
+    passfail(result, __func__, "Indexing::createFss_File");
+
+    //Test generation of Fss_Files from a directory
+    std::vector<Fss_File> directories;
+    std::vector<Fss_File> files = Indexing::getFilesFromDirectory(testDb.pathToDb, volumeTagA, directories);
+    std::cout << "Indexing::getFilesFromDirectory for the path " << testDb.pathToDb << " returned " << std::to_string(files.size()) << " results including " << std::to_string(directories.size()) << " directories\n";
+    if (verbose){
+        std::cout << "Files discovered:\n";
+        for (auto file : files){
+            std::cout << file.getAttributesAsString() << "------\n";
+        }
+    }
+}
+
 int main(){
+    testpath = std::filesystem::current_path();
+    testDb = { testpath, "testdb" };
+    testConfig = { testpath, "testconfig" };
+    
     testLock();
     testDatabase();
     testLocalConfig();
+    testIndexing();
 
     //remove the test db and config
     std::remove(testDb.fullPathToDb().c_str());

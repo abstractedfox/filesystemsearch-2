@@ -18,10 +18,6 @@
 
 #include "Indexing.hpp"
 #include "RuntimeState.hpp"
-#include "Lock.hpp"
-#include "Database.hpp"
-#include "Schemas.hpp"
-#include "Fss_File.hpp"
 
 /*
 int callbackTest(void* idk, int columns, char** columnContents, char** columnNames){
@@ -44,12 +40,6 @@ int callbackTest(void* idk, int columns, char** columnContents, char** columnNam
     std::cout << "callback end!\n";
     return 0;
 }*/
-
-void workingWithFiles(){
-    std::filesystem::path thisPath = { "." };
-    
-    std::vector test = Indexing::GetFilesFromDirectory(".");
-}
 
 void testDb(){
     DbPath dbPath = {"", "testdb.sqlite3"};

@@ -10,15 +10,16 @@
 //  Created by Chris on 11/26/23.
 //
 
-#include <string>
-
 #ifndef Constants_h
 #define Constants_h
+
+#include <string>
 
 namespace Constants{
     const std::string lockFileName = "fssLock";
     const std::string databaseName = "fssDb.sqlite3";
     const std::string configName = "fssConfig.sqlite3";
+    const std::string SEPARATOR = "/";
 };
 
 enum Result{
@@ -28,7 +29,9 @@ enum Result{
     CREATE_DATABASE_FAIL,
     LOCK_FAIL,
     GENERIC_SQLITE_FAIL,
-    INCORRECT_DATA_FAIL
+    INCORRECT_DATA_FAIL,
+    VOLUME_TAG_ERROR,
+    FILE_DOESNT_EXIST
 };
 
 #endif /* Constants_h */

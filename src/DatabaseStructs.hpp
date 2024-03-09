@@ -4,16 +4,17 @@
 //new or derived content from or based on the input set, or used to build a data set or training model for any software or
 //tooling which facilitates the use or operation of such software.
 
-#include <iostream>
-#include <vector>
-
-#include "Migrations.hpp"
-#include "Constants.hpp"
-
 #ifndef DatabaseStructs_hpp
 #define DatabaseStructs_hpp
 
+#include <iostream>
+#include <vector>
+#include <filesystem>
+
+#include "Constants.hpp"
+
 class Schema; //forward declaration for Migration typedef
+class Fss_File; //forward declaration to mitigate circular dependency
 
 //For code clarity (ie making it clear whether a function is returning a 'Result' as defined in Constants.hpp or an SQLite result
 typedef int SqliteResult;
@@ -23,6 +24,9 @@ struct DbPath{
     std::string pathToDb; //Path to the directory containing the database
     std::string dbFilename; //The filename of the database
     std::string fullPathToDb(){
+        if (pathToDb.substr(pathToDb.length() - 1) != Constants::SEPARATOR){
+            return pathToDb + Constants::SEPARATOR + dbFilename;
+        }
         return pathToDb + dbFilename;
     }
 };
@@ -62,12 +66,48 @@ public:
     Schema* next;
 };
 
+//Used for holding a string that should resolve to a valid VolumeTag
+typedef std::string VolumeTag_Name;
+
 //Class for associating an abstracted volume tag with the path of a specific, real volume on a specific machine
+//Should only be used in code associated with resolution of a VolumeTag to a real volume on a specific machine; if passing or retaining the value of a VolumeTag, use VolumeTag_Name
+//the RealPath variable should be a literal valid path on a machine, ending in its native separating character (ie a backslash for windows). This is unlike the unresolved paths stored in Fss_File, which should always use /
 class VolumeTag{
-public:
+private:
     std::string tag;
     std::string realPath;
+
+public:
+    VolumeTag(){
+        tag = "";
+        realPath = "";
+    }
+
+    VolumeTag(std::string tagName, std::string pathRoot){
+        tag = tagName;
+        realPath = pathRoot;
+    }
+
+    //Instantiate a VolumeTag from a 'path' instance with the name 'tagName'
+    VolumeTag (std::string tagName, std::filesystem::path pathRoot){
+        tag = tagName;
+        realPath = pathRoot.root_name();
+
+        if (realPath[realPath.length() - 1] != pathRoot.preferred_separator){
+            realPath += pathRoot.preferred_separator;
+        }
+    }
+
+    std::string getTag(){
+        return tag;
+    }
+
+    std::string getRealPath(){
+        return realPath;
+    }
+
 };
+
 
 
 #endif

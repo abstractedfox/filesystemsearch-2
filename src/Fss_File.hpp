@@ -9,23 +9,37 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <chrono>
+#include <format>
+
+#include "DatabaseStructs.hpp"
 
 //'File System Search file'. A class for containing info about a file.
 //An instance of Fss_File is immutable once constructed; this is to discourage usage that could result in discrepancies or confusion (ie modifying one and assuming it would modify the data in the database)
+
+//Unlike the path root referred to by a VolumeTag, the 'unresolvedPath' of a Fss_File is not specific to a single machine. This value should always use a forward slash as the separating character, and should not begin with a slash, semantically reflecting that they are relative paths without roots
 class Fss_File{
 public:
-    Fss_File(std::string fullPath, bool isDirectory, std::string VolumeTag, std::vector<int> checksum, std::filesystem::file_time_type lastModified, bool fromDb);
+    /*Fss_File(std::string fullPath, bool isDirectory, VolumeTag_Name VolumeTag, std::vector<int> checksum, std::filesystem::file_time_type lastModified, bool fromDb);*/
+    
+    Fss_File();
+
+    Fss_File(std::string set_unresolvedPath, bool set_isDirectory, VolumeTag_Name set_VolumeTag, std::vector<int> set_checksum, std::filesystem::file_time_type set_lastModified, bool set_fromDb);
     
     bool get_isDirectory() const;
-    std::string get_fullPath() const;
-    std::string get_VolumeTag() const;
+    std::string get_unresolvedPath() const;
+    VolumeTag_Name get_volumeTag() const;
     std::vector<int> get_checksum() const;
     std::filesystem::file_time_type get_lastModified() const;
+    bool isFromDb() const;
+
+    //for debugging purposes
+    std::string getAttributesAsString();
 
 private:
     bool isDirectory;
-    std::string fullPath;
-    std::string VolumeTag;
+    std::string unresolvedPath;
+    VolumeTag_Name volumeTag;
     std::vector<int> checksum;
     std::filesystem::file_time_type lastModified;
 
