@@ -58,7 +58,7 @@ int Database::Callback(void* outputBufferAsQueryOutput, int count, char** column
 
 Result Database::AddVolumeTag(DbPath localConfigDb, VolumeTag volumeTag){
     std::string statement = "INSERT INTO VolumeTags(VolumeTag, RealPath) VALUES ('";
-    statement += volumeTag.tag + "', '" + volumeTag.realPath + "');";
+    statement += volumeTag.getTag() + "', '" + volumeTag.getRealPath() + "');";
     
     QueryOutput queryOutput;
     Result result = Database::RunStatement(localConfigDb, statement, false, queryOutput);
@@ -76,22 +76,23 @@ Result Database::GetVolumeTags(DbPath localConfigDb, std::vector<VolumeTag> &out
     }
     
     for (int i = 0; i < queryOutput.columnName.size(); i += 2){
-        VolumeTag tag;
+        //VolumeTag tag;
         if (queryOutput.columnName[i] == "VolumeTag"){
-            tag.tag = queryOutput.columnData[i];
+            if (queryOutput.columnName[i + 1] == "RealPath"){
+                VolumeTag tag(queryOutput.columnData[i], queryOutput.columnData[i + 1]);
+
+                output.push_back(tag);
+            }
+            else{
+                std::cerr << __FILE__ << " Unexpected column name, expected RealPath and got " << queryOutput.columnName[i] << "\n";
+                return INCORRECT_DATA_FAIL;
+            }
+
         }
         else{
             std::cerr << __FILE__ << " Unexpected column name, expected VolumeTag and got " << queryOutput.columnName[i] << "\n";
             return INCORRECT_DATA_FAIL;
         }
-        if (queryOutput.columnName[i + 1] == "RealPath"){
-            tag.realPath = queryOutput.columnData[i + 1];
-        }
-        else{
-            std::cerr << __FILE__ << " Unexpected column name, expected RealPath and got " << queryOutput.columnName[i] << "\n";
-            return INCORRECT_DATA_FAIL;
-        }
-        output.push_back(tag);
     }
     return SUCCESS;
 }

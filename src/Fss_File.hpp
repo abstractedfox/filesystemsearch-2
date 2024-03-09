@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <chrono>
+#include <format>
 
 #include "DatabaseStructs.hpp"
 
@@ -20,6 +22,8 @@ class Fss_File{
 public:
     /*Fss_File(std::string fullPath, bool isDirectory, VolumeTag_Name VolumeTag, std::vector<int> checksum, std::filesystem::file_time_type lastModified, bool fromDb);*/
     
+    Fss_File();
+
     Fss_File(std::string set_unresolvedPath, bool set_isDirectory, VolumeTag_Name set_VolumeTag, std::vector<int> set_checksum, std::filesystem::file_time_type set_lastModified, bool set_fromDb);
     
     bool get_isDirectory() const;
@@ -28,6 +32,9 @@ public:
     std::vector<int> get_checksum() const;
     std::filesystem::file_time_type get_lastModified() const;
     bool isFromDb() const;
+
+    //for debugging purposes
+    std::string getAttributesAsString();
 
 private:
     bool isDirectory;

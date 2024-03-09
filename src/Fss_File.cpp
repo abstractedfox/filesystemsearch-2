@@ -1,8 +1,12 @@
 #include "Fss_File.hpp"
-/*
-Fss_File::Fss_File(std::string unresolvedPath, bool isDirectory, VolumeTag_Name volumeTag, std::vector<int> checksum, std::filesystem::file_time_type lastModified, bool fromDb) : unresolvedPath(unresolvedPath), isDirectory(isDirectory), volumeTag(volumeTag), checksum(checksum), lastModified(lastModified), fromDb(fromDb){
-    
-}*/
+
+Fss_File::Fss_File(){
+    unresolvedPath = "";
+    isDirectory = false;
+    checksum = std::vector<int>();
+
+    fromDb = false;
+}
 
 Fss_File::Fss_File(std::string set_unresolvedPath, bool set_isDirectory, VolumeTag_Name set_VolumeTag, std::vector<int> set_checksum, std::filesystem::file_time_type set_lastModified, bool set_fromDb){
     unresolvedPath = set_unresolvedPath;
@@ -42,4 +46,20 @@ std::filesystem::file_time_type Fss_File::get_lastModified() const{
 
 bool Fss_File::isFromDb() const{
     return fromDb;
+}
+
+std::string Fss_File::getAttributesAsString(){
+    std::string output = "Unresolved path: " + unresolvedPath + "\n" +
+    "isDirectory: " + std::to_string(isDirectory) + "\n" +
+    "VolumeTag_Name: " + volumeTag + "\n" +
+    "Checksum: ";
+
+    for (auto value : checksum){
+        output += std::to_string(value) + " ";
+    }
+
+    output += "\nlastModified: " + std::format("{}", lastModified) + "\n" +
+    "fromDb: " + std::to_string(fromDb) + "\n";
+
+    return output;
 }

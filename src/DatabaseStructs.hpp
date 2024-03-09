@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <filesystem>
 
 #include "Constants.hpp"
 
@@ -72,9 +73,39 @@ typedef std::string VolumeTag_Name;
 //Should only be used in code associated with resolution of a VolumeTag to a real volume on a specific machine; if passing or retaining the value of a VolumeTag, use VolumeTag_Name
 //the RealPath variable should be a literal valid path on a machine, ending in its native separating character (ie a backslash for windows). This is unlike the unresolved paths stored in Fss_File, which should always use /
 class VolumeTag{
-public:
+private:
     std::string tag;
     std::string realPath;
+
+public:
+    VolumeTag(){
+        tag = "";
+        realPath = "";
+    }
+
+    VolumeTag(std::string tagName, std::string pathRoot){
+        tag = tagName;
+        realPath = pathRoot;
+    }
+
+    //Instantiate a VolumeTag from a 'path' instance with the name 'tagName'
+    VolumeTag (std::string tagName, std::filesystem::path pathRoot){
+        tag = tagName;
+        realPath = pathRoot.root_name();
+
+        if (realPath[realPath.length() - 1] != pathRoot.preferred_separator){
+            realPath += pathRoot.preferred_separator;
+        }
+    }
+
+    std::string getTag(){
+        return tag;
+    }
+
+    std::string getRealPath(){
+        return realPath;
+    }
+
 };
 
 
