@@ -100,7 +100,6 @@ void testLocalConfig(){
     if (volumetags.size() != 2){
         fail(__func__, "GetVolumeTags returned incorrect number of results, expected 2 and received " + std::to_string(volumetags.size())); 
     }
-
 }
 
 void testIndexing(){

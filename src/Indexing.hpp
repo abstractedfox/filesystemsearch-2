@@ -27,10 +27,11 @@
 
 class Indexing{
 public:
+    //Returns the contents of a directory as Fss_File instances. Any directories discovered will be included in the output, as well as separately copied in directories_out
     static std::vector<Fss_File> getFilesFromDirectory(std::string path, VolumeTag& volumeTag, std::vector<Fss_File>& directories_out);
-    
-    //Create a Fss_File from a real path and a volumetag that resolves to the root of that path
-    //static Result createFss_File(std::filesystem::path pathToFile, VolumeTag& volumeTag, std::unique_ptr<Fss_File>& out);
+
+    //Returns the contents of a directory as Fss_File instances. Returns any additional directories found via directories_out. Pass 'true' to recursive to recursively run for all subdirectories discovered
+    static std::vector<Fss_File> getFilesFromDirectory(std::string path, VolumeTag& volumeTag, std::vector<Fss_File>& directories_out, bool recursive);
 
     //Create a Fss_File from a real file and a volumetag that resolves to the root path of that file
     static Result createFss_File(std::filesystem::directory_entry file, VolumeTag& volumeTag, std::vector<int> checksum, std::unique_ptr<Fss_File>& out);

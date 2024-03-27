@@ -13,7 +13,6 @@
 #include "Indexing.hpp"
 
 //Returns a vector containing the contents of a directory as Fss_File
-//Currently incomplete! Should probably finish the 'volumetags' functionality or we're going to have a lot of stuff here that needs to be redone/doesn't really work to our spec anyway
 std::vector<Fss_File> Indexing::getFilesFromDirectory(std::string path, VolumeTag& volumeTag, std::vector<Fss_File>& directories_out){
     std::vector<Fss_File> files;
 
@@ -46,6 +45,30 @@ std::vector<Fss_File> Indexing::getFilesFromDirectory(std::string path, VolumeTa
     catch(std::exception e){
         std::cerr << "Generic exception: " << e.what() << "\n";
     }
+
+    return files;
+}
+
+//Incomplete
+std::vector<Fss_File> Indexing::getFilesFromDirectory(std::string path, VolumeTag& volumeTag, std::vector<Fss_File>& directories_out, bool recursive){
+    if (!recursive){
+        return Indexing::getFilesFromDirectory(path, volumeTag, directories_out);
+    }
+
+    std::vector<Fss_File> files; //vector to be returned
+    std::unique_ptr<Fss_File> file; //repopulate this during the loop
+
+    //Start the loop with 'this' directory
+    std::filesystem::directory_entry start((std::filesystem::path)path);
+    directories_out.push_back(Indexing::createFss_File(start, volumeTag, empty_checksum, file));
+
+    int directoriesCount = 0;
+    do{
+        //directoriesCount = directories_out.size();
+
+        //note to future chris: run getFilesFromDirectory as normal here, loop should continue until all directories in directories_out are iterated and no more have been added
+    }
+    while(directories_out.size() > directoriesCount);
 
     return files;
 }
